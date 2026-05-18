@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
     Button,
     Card,
@@ -13,12 +13,13 @@ import {
     TextField,
 } from "@heroui/react";
 import { FolderPlus, TrashBin } from "@gravity-ui/icons";
+import toast from "react-hot-toast";
 
 const AddPetPage = () => {
 
-    const isPending = false;
+    const [isPending, setIsPending] = useState(false);
 
-    const onSubmit = async(e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
 
         const formData = new FormData(e.currentTarget);
@@ -27,16 +28,34 @@ const AddPetPage = () => {
 
         // console.log(petData);
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pet`, {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(petData)
-        })
+        setIsPending(true);
+        try {
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_SERVER_URL}/pet`,
+                {
+                    method: "POST",
+                    headers: {
+                        "content-type": "application/json",
+                    },
+                    body: JSON.stringify(petData),
+                }
+            );
 
-        const data = await res.json();
-        console.log(data);
+            const data = await res.json();
+
+            if (res.ok) {
+                toast.success("Pet added successfully!");
+                e.target.reset();
+            } else {
+                toast.error(data.message || "Failed to add pet");
+            }
+        }
+        catch (error) {
+            toast.error(`Something went wrong" ${error.message}`);
+        }
+        finally {
+            setIsPending(false);
+        }
     };
 
     return (

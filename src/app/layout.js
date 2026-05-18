@@ -1,5 +1,6 @@
 import { Poppins, Nunito } from "next/font/google";
 import "./globals.css"; // Double check if this path needs to be "../globals.css" or "./globals.css" depending on your exact folder depth
+import { Toaster } from "react-hot-toast";
 
 export const poppins = Poppins({
     subsets: ["latin"],
@@ -24,6 +25,7 @@ export default function RootLayout({ children }) {
         >
             <body className="min-h-full bg-white">
                 {children}
+                <Toaster />
             </body>
         </html>
     );

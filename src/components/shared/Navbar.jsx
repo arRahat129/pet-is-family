@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Avatar } from "@heroui/react";
+import { Avatar, Button } from "@heroui/react";
 import { Menu, LogOut } from "lucide-react";
 import Image from "next/image";
 import logoImg from "@/assets/logo.png";
@@ -49,48 +49,81 @@ export default function Navbar() {
                         ))}
                     </nav>
 
-                    <div className="relative">
-                        <button
-                            onClick={() => setUserMenuOpen((p) => !p)}
-                            className="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-green-100 transition"
-                        >
-                            <Avatar src="#" size="sm" />
-                            <div className="hidden sm:block text-left">
-                                <p className="text-sm font-medium text-green-900">
-                                    User Name
-                                </p>
-                                <p className="text-xs text-green-700">
-                                    john@email.com
-                                </p>
-                            </div>
-                        </button>
+                    <div className="relative flex items-center gap-3">
+                        {/* {
+                            !user
+                                ? (
+                                    <>
+                                        <Link href="/signin">
+                                            <Button variant="outline" className="rounded-xl">
+                                                Login
+                                            </Button>
+                                        </Link>
 
-                        {
-                            userMenuOpen && (
-                                <div className="absolute right-0 mt-2 w-48 bg-white border border-green-100 rounded-lg shadow-lg overflow-hidden">
-                                    <Link
-                                        href="/dashboard"
-                                        onClick={() => setUserMenuOpen(false)}
-                                        className="block px-4 py-2 text-sm hover:bg-green-50 text-green-900"
-                                    >
-                                        Dashboard
-                                    </Link>
+                                        <Link href="/signup">
+                                            <Button className="bg-green-600 text-white rounded-xl">
+                                                Join for Free
+                                            </Button>
+                                        </Link>
+                                    </>
+                                )
+                                : (
+                                    <>
+                                        <Button
+                                            onClick={() => setUserMenuOpen((p) => !p)}
+                                            className="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-green-100"
+                                        >
+                                            <Avatar src={user.image || ""} size="sm" />
 
-                                    <button
-                                        onClick={() => setUserMenuOpen(false)}
-                                        className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-green-50"
-                                    >
-                                        <LogOut size={16} />
-                                        Logout
-                                    </button>
-                                </div>
-                            )
-                        }
+                                            <div className="hidden sm:block text-left">
+                                                <p className="text-sm font-medium text-green-900">
+                                                    {user.name}
+                                                </p>
+                                                <p className="text-xs text-green-700">
+                                                    {user.email}
+                                                </p>
+                                            </div>
+                                        </Button>
+
+                                        {userMenuOpen && (
+                                            <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg overflow-hidden">
+
+                                                <Link
+                                                    href="/dashboard"
+                                                    className="block px-4 py-2 text-sm hover:bg-green-50"
+                                                >
+                                                    Dashboard
+                                                </Link>
+
+                                                <button
+                                                    onClick={handleLogout}
+                                                    className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-green-50"
+                                                >
+                                                    <LogOut size={16} />
+                                                    Logout
+                                                </button>
+                                            </div>
+                                        )}
+                                    </>
+                                )} */}
+
+                        <Link href="/signin">
+                            <Button variant="outline" className="rounded-xl">
+                                Login
+                            </Button>
+                        </Link>
+
+                        <Link href="/signup">
+                            <Button className="bg-green-600 text-white rounded-xl">
+                                Join for Free
+                            </Button>
+                        </Link>
+
                     </div>
                 </div>
             </header>
 
-            {
+            {/* {
                 mobileOpen && (
                     <div className="fixed inset-0 bg-black/30 z-50">
                         <div className="absolute left-0 top-0 w-72 h-full bg-green-50 p-5 border-r border-green-100">
@@ -116,23 +149,30 @@ export default function Navbar() {
 
                                 <hr className="my-2 border-green-200" />
 
-                                <Link
-                                    href="/dashboard"
-                                    onClick={() => setMobileOpen(false)}
-                                    className="text-green-800"
-                                >
-                                    Dashboard
-                                </Link>
+                                {user ? (
+                                    <>
+                                        <Link href="/dashboard"
+                                            onClick={() => setMobileOpen(false)}
+                                            className="text-green-800">Dashboard</Link>
 
-                                <button className="text-left text-red-500 flex items-center gap-2">
-                                    <LogOut size={16} />
-                                    Logout
-                                </button>
+                                        <button
+                                            onClick={handleLogout}
+                                            className="text-left text-red-500"
+                                        >
+                                            Logout
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Link href="/signin">Login</Link>
+                                        <Link href="/signup">Join for Free</Link>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
                 )
-            }
+            } */}
         </>
     );
 }

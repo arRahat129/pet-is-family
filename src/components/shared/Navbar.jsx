@@ -21,7 +21,6 @@ export default function Navbar() {
             <header className="w-full bg-green-50 border-b border-green-100 text-green-950 relative z-50">
                 <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
 
-                    {/* LEFT */}
                     <div className="flex items-center gap-3">
                         <button
                             className="md:hidden text-green-900"
@@ -38,7 +37,6 @@ export default function Navbar() {
                         </Link>
                     </div>
 
-                    {/* CENTER */}
                     <nav className="hidden md:flex gap-8">
                         {routes.map((route) => (
                             <Link
@@ -51,7 +49,6 @@ export default function Navbar() {
                         ))}
                     </nav>
 
-                    {/* USER */}
                     <div className="relative">
                         <button
                             onClick={() => setUserMenuOpen((p) => !p)}
@@ -68,71 +65,74 @@ export default function Navbar() {
                             </div>
                         </button>
 
-                        {userMenuOpen && (
-                            <div className="absolute right-0 mt-2 w-48 bg-white border border-green-100 rounded-lg shadow-lg overflow-hidden">
-                                <Link
-                                    href="/dashboard"
-                                    onClick={() => setUserMenuOpen(false)}
-                                    className="block px-4 py-2 text-sm hover:bg-green-50 text-green-900"
-                                >
-                                    Dashboard
-                                </Link>
+                        {
+                            userMenuOpen && (
+                                <div className="absolute right-0 mt-2 w-48 bg-white border border-green-100 rounded-lg shadow-lg overflow-hidden">
+                                    <Link
+                                        href="/dashboard"
+                                        onClick={() => setUserMenuOpen(false)}
+                                        className="block px-4 py-2 text-sm hover:bg-green-50 text-green-900"
+                                    >
+                                        Dashboard
+                                    </Link>
 
-                                <button
-                                    onClick={() => setUserMenuOpen(false)}
-                                    className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-green-50"
-                                >
-                                    <LogOut size={16} />
-                                    Logout
-                                </button>
-                            </div>
-                        )}
+                                    <button
+                                        onClick={() => setUserMenuOpen(false)}
+                                        className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-green-50"
+                                    >
+                                        <LogOut size={16} />
+                                        Logout
+                                    </button>
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
             </header>
 
-            {/* MOBILE MENU */}
-            {mobileOpen && (
-                <div className="fixed inset-0 bg-black/30 z-50">
-                    <div className="absolute left-0 top-0 w-72 h-full bg-green-50 p-5 border-r border-green-100">
+            {
+                mobileOpen && (
+                    <div className="fixed inset-0 bg-black/30 z-50">
+                        <div className="absolute left-0 top-0 w-72 h-full bg-green-50 p-5 border-r border-green-100">
 
-                        <button
-                            onClick={() => setMobileOpen(false)}
-                            className="mb-5 text-green-900"
-                        >
-                            ✕
-                        </button>
-
-                        <div className="flex flex-col gap-4">
-                            {routes.map((route) => (
-                                <Link
-                                    key={route.href}
-                                    href={route.href}
-                                    onClick={() => setMobileOpen(false)}
-                                    className="text-green-800 font-medium"
-                                >
-                                    {route.name}
-                                </Link>
-                            ))}
-
-                            <hr className="my-2 border-green-200" />
-
-                            <Link
-                                href="/dashboard"
+                            <button
                                 onClick={() => setMobileOpen(false)}
-                                className="text-green-800"
+                                className="mb-5 text-green-900"
                             >
-                                Dashboard
-                            </Link>
-
-                            <button className="text-left text-red-500 flex items-center gap-2">
-                                <LogOut size={16} />
-                                Logout
+                                ✕
                             </button>
+
+                            <div className="flex flex-col gap-4">
+                                {routes.map((route) => (
+                                    <Link
+                                        key={route.href}
+                                        href={route.href}
+                                        onClick={() => setMobileOpen(false)}
+                                        className="text-green-800 font-medium"
+                                    >
+                                        {route.name}
+                                    </Link>
+                                ))}
+
+                                <hr className="my-2 border-green-200" />
+
+                                <Link
+                                    href="/dashboard"
+                                    onClick={() => setMobileOpen(false)}
+                                    className="text-green-800"
+                                >
+                                    Dashboard
+                                </Link>
+
+                                <button className="text-left text-red-500 flex items-center gap-2">
+                                    <LogOut size={16} />
+                                    Logout
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )
+            }
         </>
     );
 }

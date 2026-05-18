@@ -1,3 +1,4 @@
+import { ArrowRight } from "@gravity-ui/icons";
 import Image from "next/image";
 import React from "react";
 
@@ -11,23 +12,23 @@ const PetCareTips = () => {
                 </h2>
 
                 <div className="flex flex-col md:flex-row justify-center items-center gap-8 mt-10">
-                <div className="w-full md:w-1/2 flex justify-center">
-                    <Image
-                    src={'https://images.unsplash.com/photo-1638468382965-b9afcb96e9b1'}
-                    alt="Caring Owner"
-                    width={300}
-                    height={100}
-                />
-                </div>
-                <ul className="text-green-800 space-y-3 text-sm md:text-base">
+                    <div className="w-full md:w-1/2 flex justify-center">
+                        <Image
+                            src={'https://images.unsplash.com/photo-1638468382965-b9afcb96e9b1'}
+                            alt="Caring Owner"
+                            width={300}
+                            height={100}
+                        />
+                    </div>
+                    <ul className="text-green-800 space-y-3 text-sm md:text-base">
 
-                    <li>Provide clean water and healthy food daily</li>
-                    <li>Regular vet checkups are important</li>
-                    <li>Give your pet enough exercise and playtime</li>
-                    <li>Keep vaccinations up to date</li>
-                    <li>Show love, patience, and care</li>
+                        <li className="flex items-center gap-2"><ArrowRight />Provide clean water and healthy food daily</li>
+                        <li className="flex items-center gap-2"><ArrowRight />Regular vet checkups are important</li>
+                        <li className="flex items-center gap-2"><ArrowRight />Give your pet enough exercise and playtime</li>
+                        <li className="flex items-center gap-2"><ArrowRight />Keep vaccinations up to date</li>
+                        <li className="flex items-center gap-2"><ArrowRight />Show love, patience, and care</li>
 
-                </ul>
+                    </ul>
                 </div>
 
             </div>

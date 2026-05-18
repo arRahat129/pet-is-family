@@ -1,8 +1,8 @@
 import { Card, Chip, Separator, Button } from "@heroui/react";
-import { DollarSign } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { BiDollar } from "react-icons/bi";
 import { FaMars, FaVenus } from "react-icons/fa";
 import { MdPets } from "react-icons/md";
 
@@ -67,7 +67,7 @@ const PetCard = ({ petData }) => {
                     </div>
 
                     <div className="flex items-center gap-1 font-semibold text-green-700">
-                        <DollarSign size={20} />
+                        <BiDollar size={20} />
                         {adoptionFee}
                     </div>
                 </div>
@@ -75,7 +75,7 @@ const PetCard = ({ petData }) => {
                 <Separator />
 
                 <div className="flex gap-3">
-                    <Link href={`#`}>
+                    <Link href={`/all-pets/${_id}`}>
                         <Button
                             className="w-full bg-green-600 text-white font-medium rounded-xl"
                         >

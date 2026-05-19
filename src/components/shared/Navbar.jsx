@@ -103,11 +103,12 @@ export default function Navbar() {
                                         >
                                             <Avatar>
                                                 <Avatar.Image
-                                                src={user?.image || ""}
-                                                name={user?.name || "User"}
-                                                size="sm"
-                                            />
-                                            <Avatar.Fallback>{user?.name?.[0]}</Avatar.Fallback>
+                                                    referrerPolicy="no-referrer"
+                                                    src={user?.image || ""}
+                                                    name={user?.name || "User"}
+                                                    size="sm"
+                                                />
+                                                <Avatar.Fallback>{user?.name?.[0]}</Avatar.Fallback>
                                             </Avatar>
 
                                             <div className="hidden sm:block text-left">
@@ -165,8 +166,8 @@ export default function Navbar() {
                                         href={route.href}
                                         onClick={() => setMobileOpen(false)}
                                         className={`text-sm font-medium pb-1 border-r-10 transition ${pathname === route.href
-                                                ? "border-green-700 text-green-950"
-                                                : "border-transparent text-green-800 hover:text-green-950 hover:border-green-400"
+                                            ? "border-green-700 text-green-950"
+                                            : "border-transparent text-green-800 hover:text-green-950 hover:border-green-400"
                                             }`}
                                     >
                                         {route.name}

@@ -1,11 +1,12 @@
 "use client";
 
 import { authClient } from '@/lib/auth-client';
-import { Button, Card, FieldError, Input, Label, TextField } from '@heroui/react';
+import { Button, Card, FieldError, Input, Label, Separator, TextField } from '@heroui/react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
+import { FcGoogle } from 'react-icons/fc';
 
 const SignInPage = () => {
     const [error, setError] = useState("");
@@ -49,11 +50,11 @@ const SignInPage = () => {
 
         // console.log({ data, error });
 
-        if(data){
+        if (data) {
             toast.success(`Sign In Succesfully! -> Welcome: ${data?.user?.name}`);
             redirect('/');
         }
-        if(error){
+        if (error) {
             toast.error(`An Unexpected Error Occured! || ${error?.message}`)
             setLoading(false);
             return;
@@ -61,6 +62,12 @@ const SignInPage = () => {
 
 
         setLoading(false);
+    }
+
+    const handleGoogleSignIn = async () => {
+        await authClient.signIn.social({
+            provider: "google"
+        })
     }
 
     return (
@@ -104,6 +111,14 @@ const SignInPage = () => {
                 <p className="text-center text-sm mt-4 text-gray-600">
                     Don't have an account? <Link href={'/signup'}><span className="text-green-700 font-medium cursor-pointer">Register Now</span></Link>
                 </p>
+
+                <div className='flex justify-center items-center gap-3'>
+                    <Separator />
+                    <p className='whitespace-nowrap'>or</p>
+                    <Separator />
+                </div>
+
+                <Button onClick={handleGoogleSignIn} variant='outline' className={'w-full rounded-xl'}><FcGoogle /> Sign In with Google</Button>
             </Card>
         </div>
     );

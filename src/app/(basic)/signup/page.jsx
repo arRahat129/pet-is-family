@@ -1,11 +1,12 @@
 "use client";
 
 import { authClient } from '@/lib/auth-client';
-import { Button, Card, FieldError, Input, Label, TextField } from '@heroui/react';
+import { Button, Card, FieldError, Input, Label, Separator, TextField } from '@heroui/react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
+import { FcGoogle } from 'react-icons/fc';
 
 const SignUpPage = () => {
     const [error, setError] = useState("");
@@ -59,18 +60,23 @@ const SignUpPage = () => {
 
         // console.log({ data, error });
 
-        if(data){
+        if (data) {
             toast.success(`Sign Up Succesfully! -> ${data?.user?.name} Please Login In to Preceed...`)
             redirect('/signin');
         }
-        if(error){
+        if (error) {
             toast.error(`An Unexpected Error Occured! || ${error?.message}`)
             setLoading(false);
             return;
         }
 
-
         setLoading(false);
+    }
+
+    const handleGoogleSignIn = async () => {
+        await authClient.signIn.social({
+            provider: "google"
+        })
     }
 
     return (
@@ -128,9 +134,17 @@ const SignUpPage = () => {
                     </Button>
                 </form>
 
-                <p className="text-center text-sm mt-4 text-gray-600">
+                <p className="text-center text-sm my-4 text-gray-600">
                     Already have an account? <Link href={'/signin'}><span className="text-green-700 font-medium cursor-pointer">Login Now!</span></Link>
                 </p>
+
+                <div className='flex justify-center items-center gap-3'>
+                    <Separator />
+                    <p className='whitespace-nowrap'>or</p>
+                    <Separator />
+                </div>
+
+                <Button onClick={handleGoogleSignIn} variant='outline' className={'w-full rounded-xl'}><FcGoogle /> Sign In with Google</Button>
             </Card>
         </div>
     );

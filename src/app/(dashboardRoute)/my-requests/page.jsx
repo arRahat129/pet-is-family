@@ -12,7 +12,7 @@ const MyRequestsPage = async () => {
     // console.log(session);
     const user = session?.user;
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/adoption/${user.id}`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/adoption/adopter/${user.id}`);
 
     const myRequests = await res.json();
     // console.log(myRequests);

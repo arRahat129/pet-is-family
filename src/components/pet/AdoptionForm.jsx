@@ -22,12 +22,15 @@ export default function AdoptionPanel({ petDetails }) {
         const payload = {
             petId: petDetails._id,
             petName: petDetails.petName,
+            petImage: petDetails.imageUrl,
 
             ownerId: petDetails.userId,
+            ownerName: petDetails.ownerName,
             ownerEmail: petDetails.ownerEmail,
 
             adopterId: user?.id,
             adopterName: user?.name,
+            adopterImage: user?.image,
             adopterEmail: user?.email,
 
             pickupDate: form.get("pickupDate"),

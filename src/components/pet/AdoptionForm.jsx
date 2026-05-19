@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Input, TextArea } from "@heroui/react";
+import { Button, Card, Input, TextArea } from "@heroui/react";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
 
@@ -9,7 +9,7 @@ export default function AdoptionPanel({ petDetails }) {
     const { data: session } = authClient.useSession();
     const user = session?.user;
 
-    console.log({user, petDetails});
+    // console.log({ user, petDetails });
 
     const [loading, setLoading] = useState(false);
 
@@ -37,13 +37,25 @@ export default function AdoptionPanel({ petDetails }) {
             createdAt: new Date(),
         };
 
-        if (payload.ownerEmail === payload.adopterEmail) {
-            toast.error("You cannot adopt your own pet!");
-            setLoading(false);
-            return;
-        }
+        try {
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_SERVER_URL}/adoption`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(payload),
+                }
+            );
 
-        
+            const data = await res.json();
+            console.log(data);
+        } catch (error) {
+            toast.error(error.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (

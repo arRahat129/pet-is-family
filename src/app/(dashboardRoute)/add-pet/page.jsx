@@ -14,19 +14,42 @@ import {
 } from "@heroui/react";
 import { FolderPlus, TrashBin } from "@gravity-ui/icons";
 import toast from "react-hot-toast";
+import { authClient } from "@/lib/auth-client";
 
 const AddPetPage = () => {
 
     const [isPending, setIsPending] = useState(false);
+
+    const [species, setSpecies] = useState(new Set([]));
+    const [gender, setGender] = useState(new Set([]));
+
+    const { data: session, isPending: isSessionLoading } = authClient.useSession();
+    const user = session?.user;
+    // console.log(user)
 
     const onSubmit = async (e) => {
         e.preventDefault();
 
         const formData = new FormData(e.currentTarget);
 
-        const petData = Object.fromEntries(formData.entries());
+        const formEntries = Object.fromEntries(formData.entries());
 
         // console.log(petData);
+
+        const selectedSpecies = Array.from(species)[0];
+        const selectedGender = Array.from(gender)[0];
+
+        const petData = {
+            ...formEntries,
+            species: selectedSpecies,
+            gender: selectedGender,
+            userId: user.id,
+            ownerEmail: user.email,
+            ownerName: user.name,
+            adoptionStatus: "available",
+            age: Number(formEntries.age),
+            adoptionFee: Number(formEntries.adoptionFee)
+        };
 
         setIsPending(true);
         try {
@@ -46,6 +69,9 @@ const AddPetPage = () => {
             if (res.ok) {
                 toast.success("Pet added successfully!");
                 e.target.reset();
+
+                setSpecies(new Set([]));
+                setGender(new Set([]));
             } else {
                 toast.error(data.message || "Failed to add pet");
             }
@@ -57,6 +83,10 @@ const AddPetPage = () => {
             setIsPending(false);
         }
     };
+
+    if (isSessionLoading) {
+        return <div className="p-6 max-w-7xl mx-auto text-center">Loading session configuration...</div>;
+    }
 
     return (
         <div className="p-4 md:p-6 max-w-7xl mx-auto">
@@ -90,6 +120,9 @@ const AddPetPage = () => {
                                 isRequired
                                 className="w-full"
                                 placeholder="Select species"
+                                // ADD THESE TWO PROPS:
+                                selectedKeys={species}
+                                onSelectionChange={setSpecies}
                             >
                                 <Label>Species</Label>
 
@@ -157,6 +190,9 @@ const AddPetPage = () => {
                                 isRequired
                                 className="w-full"
                                 placeholder="Select gender"
+                                // ADD THESE TWO PROPS:
+                                selectedKeys={gender}
+                                onSelectionChange={setGender}
                             >
                                 <Label>Gender</Label>
 
@@ -240,9 +276,9 @@ const AddPetPage = () => {
                             <TextField name="ownerEmail" isRequired>
                                 <Label>Owner Email</Label>
                                 <Input
-                                    value="user@gmail.com"
+                                    value={user?.email || "No user detected"}
                                     readOnly
-                                    className="rounded-2xl bg-gray-100"
+                                    className="rounded-2xl bg-gray-100 font-medium text-slate-600 cursor-not-allowed"
                                 />
                                 <FieldError />
                             </TextField>
@@ -269,6 +305,11 @@ const AddPetPage = () => {
                             type="reset"
                             variant="outline"
                             className="rounded-sm text-red-500 border-red-500 w-full sm:w-auto"
+                            // ADD THIS EVENT HANDLER:
+                            onPress={() => {
+                                setSpecies(new Set([]));
+                                setGender(new Set([]));
+                            }}
                         >
                             <TrashBin />
                             Cancel

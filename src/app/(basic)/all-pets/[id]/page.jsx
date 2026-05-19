@@ -36,7 +36,7 @@ const PetDetailsCard = async ({ params }) => {
                 </div>
 
                 <div>
-                    {/* <AdoptionForm key={_id} petDetails={petDetails} /> */}
+                    <AdoptionForm key={_id} petDetails={petDetails} />
                 </div>
 
             </div>

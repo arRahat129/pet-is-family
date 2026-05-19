@@ -187,8 +187,16 @@ export default function DashboardLayout({ children }) {
                             onClick={() => setUserMenuOpen((p) => !p)}
                             className="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-green-100 transition"
                         >
-                            {/* Dynamic User Profile Picture */}
-                            <Avatar referrerPolicy="no-referrer" src={user?.image || ""} size="sm" name={user?.name || "U"} />
+
+                            <Avatar>
+                                <Avatar.Image
+                                    referrerPolicy="no-referrer"
+                                    src={user?.image || ""}
+                                    name={user?.name || "User"}
+                                    size="sm"
+                                />
+                                <Avatar.Fallback>{user?.name?.[0]}</Avatar.Fallback>
+                            </Avatar>
                             <div className="hidden sm:block text-left">
                                 {/* Dynamic Name and Email */}
                                 <p className="text-sm font-medium text-green-900">{user?.name || "Guest"}</p>

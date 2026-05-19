@@ -1,104 +1,93 @@
-import { Button, Card, Input, Label, TextArea, TextField } from '@heroui/react';
-import React from 'react';
+"use client";
 
-const AdoptionForm = ({petDetails}) => {
-    const {
-        petName,
-    } = petDetails;
+import { useState } from "react";
+import { Button, Input, TextArea } from "@heroui/react";
+import toast from "react-hot-toast";
+import { authClient } from "@/lib/auth-client";
+
+export default function AdoptionPanel({ petDetails }) {
+    const { data: session } = authClient.useSession();
+    const user = session?.user;
+
+    console.log({user, petDetails});
+
+    const [loading, setLoading] = useState(false);
+
+    const handleAdopt = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        const form = new FormData(e.currentTarget);
+
+        const payload = {
+            petId: petDetails._id,
+            petName: petDetails.petName,
+
+            ownerId: petDetails.ownerId,
+            ownerEmail: petDetails.ownerEmail,
+
+            adopterId: user?.id,
+            adopterName: user?.name,
+            adopterEmail: user?.email,
+
+            pickupDate: form.get("pickupDate"),
+            message: form.get("message"),
+
+            status: "pending",
+            createdAt: new Date(),
+        };
+
+        if (payload.ownerEmail === payload.adopterEmail) {
+            toast.error("You cannot adopt your own pet!");
+            setLoading(false);
+            return;
+        }
+
+        
+    };
+
     return (
-        <Card className="border shadow-md rounded-3xl sticky top-24">
+        <form
+            onSubmit={handleAdopt}
+            className="space-y-4 bg-white p-5 rounded-xl border"
+        >
+            <h2 className="text-lg font-semibold text-green-900">
+                Request to Adopt
+            </h2>
+            <label className="text-sm">Pet Name</label>
+            <Input value={petDetails.petName} label="Pet Name" readOnly className={'w-full'} />
 
-            <div className="p-6 md:p-8">
+            <label className="text-sm">Owner Name</label>
+            <Input value={user?.name || ""} label="Your Name" readOnly className={'w-full'} />
 
-                <div className="mb-8">
-                    <h2 className="text-2xl font-bold text-green-800">
-                        Adopt {petName}
-                    </h2>
+            <label className="text-sm">Owner Email</label>
+            <Input value={user?.email || ""} label="Your Email" readOnly className={'w-full'} />
 
-                    <p className="text-gray-500 mt-2">
-                        Fill out the form to request adoption.
-                    </p>
-                </div>
+            <label className="text-sm">Preffered PickUp Day</label>
+            <Input
+                name="pickupDate"
+                type="date"
+                label="Pickup Date"
+                required
+                className={'w-full'}
+            />
 
-                <form className="space-y-6">
+            <label className="text-sm">Text To Owner</label>
+            <TextArea
+                name="message"
+                label="Message to Owner"
+                placeholder="Why are you a good match?"
+                required
+                className={'w-full'}
+            />
 
-                    <TextField>
-                        <Label>Pet Name</Label>
-
-                        <Input
-                            value={petName}
-                            readOnly
-                            className="bg-gray-100 rounded-2xl"
-                        />
-                    </TextField>
-
-                    <TextField>
-                        <Label>Your Name</Label>
-
-                        <Input
-                            value={loggedUser.name}
-                            readOnly
-                            className="bg-gray-100 rounded-2xl"
-                        />
-                    </TextField>
-
-                    <TextField>
-                        <Label>Your Email</Label>
-
-                        <Input
-                            value={loggedUser.email}
-                            readOnly
-                            className="bg-gray-100 rounded-2xl"
-                        />
-                    </TextField>
-
-                    <TextField
-                        type="date"
-                        name="pickupDate"
-                        isRequired
-                    >
-                        <Label>Pickup Date</Label>
-
-                        <Input
-                            type="date"
-                            className="rounded-2xl bg-gray-100"
-                        />
-                    </TextField>
-
-                    <TextField
-                        name="message"
-                        isRequired
-                    >
-                        <Label>Message</Label>
-
-                        <TextArea
-                            placeholder="Why do you want to adopt this pet?"
-                            className="rounded-3xl bg-gray-100"
-                        />
-                    </TextField>
-
-                    <input
-                        type="hidden"
-                        name="status"
-                        value="pending"
-                    />
-
-                    <input
-                        type="hidden"
-                        name="petId"
-                        value={_id}
-                    />
-
-                    <Button
-                        type="submit"
-                        className="w-full bg-green-600 text-white rounded-2xl h-12 text-base font-semibold"
-                    >
-                        Adopt Now
-                    </Button>
-                </form>
-            </div>
-        </Card>
+            <Button
+                type="submit"
+                className="w-full bg-green-600 text-white"
+                isDisabled={loading}
+            >
+                {loading ? "Sending..." : "Adopt Pet"}
+            </Button>
+        </form>
     );
-};
-
-export default AdoptionForm;
+}

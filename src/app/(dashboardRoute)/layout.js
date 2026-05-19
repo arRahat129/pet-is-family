@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Avatar } from "@heroui/react";
 import {
     Menu,
@@ -15,11 +15,26 @@ import {
     X
 } from "lucide-react";
 import logoImg from "@/assets/logo.png";
+import { authClient } from "@/lib/auth-client";
 
 export default function DashboardLayout({ children }) {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
     const pathname = usePathname();
+    const router = useRouter();
+
+    const { data: session, isPending } = authClient.useSession();
+    // console.log(session);
+    const user = session?.user;
+
+    const handleLogout = async () => {
+        await authClient.signOut();
+
+        setUserMenuOpen(false);
+        setMobileOpen(false);
+
+        router.push("/signin");
+    };
 
     const dashboardRoutes = [
         { name: "Home", href: "/", icon: Home },
@@ -28,8 +43,57 @@ export default function DashboardLayout({ children }) {
         { name: "My Listings", href: "/listings", icon: Layers },
     ];
 
+    if (isPending) {
+        return (
+            <div className="flex min-h-screen bg-green-50/30">
+
+                {/* Sidebar Skeleton */}
+                <aside className="hidden md:flex fixed inset-y-0 left-0 w-64 flex-col border-r border-green-100 bg-white px-4 py-5">
+                    <div className="animate-pulse space-y-4">
+
+                        <div className="h-8 w-40 bg-green-100 rounded-lg" />
+
+                        <div className="space-y-3 mt-10">
+                            <div className="h-10 bg-green-100 rounded-lg" />
+                            <div className="h-10 bg-green-100 rounded-lg" />
+                            <div className="h-10 bg-green-100 rounded-lg" />
+                            <div className="h-10 bg-green-100 rounded-lg" />
+                        </div>
+                    </div>
+                </aside>
+
+
+                <div className="md:pl-64 flex-1 flex flex-col">
+
+
+                    <header className="h-16 border-b border-green-100 bg-white px-4 md:px-8 flex items-center justify-between">
+                        <div className="h-8 w-32 bg-green-100 rounded-lg animate-pulse" />
+
+                        <div className="flex items-center gap-3 animate-pulse">
+                            <div className="w-10 h-10 rounded-full bg-green-100" />
+                            <div className="hidden sm:block space-y-2">
+                                <div className="h-3 w-24 bg-green-100 rounded" />
+                                <div className="h-3 w-32 bg-green-100 rounded" />
+                            </div>
+                        </div>
+                    </header>
+
+                    <main className="flex-1 px-4 py-6 md:px-8">
+                        <div className="mx-auto max-w-7xl bg-white rounded-xl border border-green-100/50 p-6 shadow-sm">
+                            <div className="animate-pulse space-y-4">
+                                <div className="h-8 w-56 bg-green-100 rounded-lg" />
+                                <div className="h-40 bg-green-100 rounded-2xl" />
+                                <div className="h-40 bg-green-100 rounded-2xl" />
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <div className="flex min-h-screen bg-green-50/30 text-green-950 font-sans antialiased">
+        <div className="flex min-h-screen bg-green-50/30 text-green-950 font-sans">
 
 
             <aside className="hidden md:flex fixed inset-y-0 left-0 z-20 w-64 flex-col border-r border-green-100 bg-white px-4 py-5">
@@ -71,10 +135,21 @@ export default function DashboardLayout({ children }) {
 
 
                 <div className="mt-auto border-t border-green-100 pt-4 flex items-center gap-3 px-2">
-                    <Avatar src="#" size="sm" />
+                    <Avatar>
+                        <Avatar.Image
+                            src={user?.image || ""}
+                            name={user?.name || "User"}
+                            size="sm"
+                        />
+                        <Avatar.Fallback>{user?.name?.[0]}</Avatar.Fallback>
+                    </Avatar>
                     <div className="flex flex-col min-w-0">
-                        <span className="text-sm font-semibold text-green-900 truncate">User Name</span>
-                        <span className="text-xs text-green-700 truncate">john@email.com</span>
+                        <span className="text-sm font-semibold text-green-900 truncate">
+                            {user?.name || "Guest"}
+                        </span>
+                        <span className="text-xs text-green-700 truncate">
+                            {user?.email || ""}
+                        </span>
                     </div>
                 </div>
             </aside>
@@ -112,10 +187,12 @@ export default function DashboardLayout({ children }) {
                             onClick={() => setUserMenuOpen((p) => !p)}
                             className="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-green-100 transition"
                         >
-                            <Avatar src="#" size="sm" />
+                            {/* Dynamic User Profile Picture */}
+                            <Avatar src={user?.image || ""} size="sm" name={user?.name || "U"} />
                             <div className="hidden sm:block text-left">
-                                <p className="text-sm font-medium text-green-900">User Name</p>
-                                <p className="text-xs text-green-700">john@email.com</p>
+                                {/* Dynamic Name and Email */}
+                                <p className="text-sm font-medium text-green-900">{user?.name || "Guest"}</p>
+                                <p className="text-xs text-green-700">{user?.email || ""}</p>
                             </div>
                         </button>
 
@@ -131,7 +208,10 @@ export default function DashboardLayout({ children }) {
                                     </Link>
 
                                     <button
-                                        onClick={() => setUserMenuOpen(false)}
+                                        onClick={() => {
+                                            setUserMenuOpen(false);
+                                            handleLogout();
+                                        }}
                                         className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-green-50 border-t border-slate-50"
                                     >
                                         <LogOut size={16} />
@@ -195,7 +275,13 @@ export default function DashboardLayout({ children }) {
 
                             <hr className="my-4 border-green-100" />
 
-                            <button className="text-left text-red-500 flex items-center gap-2 py-2 px-3 hover:bg-red-50 rounded-lg">
+                            <button
+                                onClick={() => {
+                                    setMobileOpen(false);
+                                    handleLogout();
+                                }}
+                                className="w-full text-left text-red-500 flex items-center gap-2 py-2 px-3 hover:bg-red-50 rounded-lg"
+                            >
                                 <LogOut size={16} />
                                 Logout
                             </button>

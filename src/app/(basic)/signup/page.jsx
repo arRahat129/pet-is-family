@@ -1,6 +1,9 @@
 "use client";
 
+import { authClient } from '@/lib/auth-client';
 import { Button, Card, FieldError, Input, Label, TextField } from '@heroui/react';
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -27,10 +30,10 @@ const SignUpPage = () => {
         setLoading(true);
 
         const formData = new FormData(e.currentTarget);
-        const data = Object.fromEntries(formData.entries());
+        const userData = Object.fromEntries(formData.entries());
 
         // console.log(data);
-        const { name, email, photo, password, confirmPassword } = data;
+        const { name, email, photo, password, confirmPassword } = userData;
 
         const passwordError = validatePassword(password);
         if (passwordError) {
@@ -45,10 +48,29 @@ const SignUpPage = () => {
             return;
         }
 
-        console.log({ name, email, photo, password });
+        // console.log({ name, email, photo, password });
+
+        const { data, error } = await authClient.signUp.email({
+            email: email,
+            password: password,
+            name: name,
+            image: photo,
+        })
+
+        // console.log({ data, error });
+
+        if(data){
+            toast.success(`Sign Up Succesfully! -> ${data?.user?.name} Please Login In to Preceed...`)
+            redirect('/signin');
+        }
+        if(error){
+            toast.error(`An Unexpected Error Occured! || ${error?.message}`)
+            setLoading(false);
+            return;
+        }
+
 
         setLoading(false);
-        // toast.success(`Sign Up Succesfully! ${name}`)
     }
 
     return (
@@ -107,7 +129,7 @@ const SignUpPage = () => {
                 </form>
 
                 <p className="text-center text-sm mt-4 text-gray-600">
-                    Already have an account? <span className="text-green-700 font-medium cursor-pointer">Login</span>
+                    Already have an account? <Link href={'/signin'}><span className="text-green-700 font-medium cursor-pointer">Login Now!</span></Link>
                 </p>
             </Card>
         </div>

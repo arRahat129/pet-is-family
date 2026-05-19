@@ -6,15 +6,39 @@ import { Avatar, Button } from "@heroui/react";
 import { Menu, LogOut } from "lucide-react";
 import Image from "next/image";
 import logoImg from "@/assets/logo.png";
+import { authClient } from "@/lib/auth-client";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Navbar() {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
 
+    const { data: session, isPending } = authClient.useSession();
+    // console.log(session);
+    const user = session?.user;
+
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const handleLogout = async () => {
+        await authClient.signOut();
+
+        setUserMenuOpen(false);
+        setMobileOpen(false);
+
+        router.push("/signin");
+    };
+
     const routes = [
         { name: "Home", href: "/" },
         { name: "All Pets", href: "/all-pets" },
     ];
+
+    if (isPending) {
+        return (
+            <header className="w-full bg-green-50 border-b border-green-100 h-20 animate-pulse" />
+        );
+    }
 
     return (
         <>
@@ -42,7 +66,10 @@ export default function Navbar() {
                             <Link
                                 key={route.href}
                                 href={route.href}
-                                className="text-sm text-green-800 hover:text-green-950 font-medium transition"
+                                className={`text-sm font-medium pb-1 border-b-2 transition ${pathname === route.href
+                                    ? "border-green-700 text-green-950"
+                                    : "border-transparent text-green-800 hover:text-green-950 hover:border-green-400"
+                                    }`}
                             >
                                 {route.name}
                             </Link>
@@ -50,7 +77,7 @@ export default function Navbar() {
                     </nav>
 
                     <div className="relative flex items-center gap-3">
-                        {/* {
+                        {
                             !user
                                 ? (
                                     <>
@@ -70,23 +97,31 @@ export default function Navbar() {
                                 : (
                                     <>
                                         <Button
+                                            variant="outline"
                                             onClick={() => setUserMenuOpen((p) => !p)}
-                                            className="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-green-100"
+                                            className="flex items-center gap-2 px-2 py-1 rounded-lg border-none hover:bg-green-100"
                                         >
-                                            <Avatar src={user.image || ""} size="sm" />
+                                            <Avatar>
+                                                <Avatar.Image
+                                                src={user?.image || ""}
+                                                name={user?.name || "User"}
+                                                size="sm"
+                                            />
+                                            <Avatar.Fallback>{user?.name?.[0]}</Avatar.Fallback>
+                                            </Avatar>
 
                                             <div className="hidden sm:block text-left">
                                                 <p className="text-sm font-medium text-green-900">
-                                                    {user.name}
+                                                    {user?.name}
                                                 </p>
                                                 <p className="text-xs text-green-700">
-                                                    {user.email}
+                                                    {user?.email}
                                                 </p>
                                             </div>
                                         </Button>
 
                                         {userMenuOpen && (
-                                            <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg overflow-hidden">
+                                            <div className="absolute right-0 top-14 w-48 bg-white border rounded-lg shadow-lg overflow-hidden">
 
                                                 <Link
                                                     href="/dashboard"
@@ -105,25 +140,13 @@ export default function Navbar() {
                                             </div>
                                         )}
                                     </>
-                                )} */}
-
-                        <Link href="/signin">
-                            <Button variant="outline" className="rounded-xl">
-                                Login
-                            </Button>
-                        </Link>
-
-                        <Link href="/signup">
-                            <Button className="bg-green-600 text-white rounded-xl">
-                                Join for Free
-                            </Button>
-                        </Link>
+                                )}
 
                     </div>
                 </div>
             </header>
 
-            {/* {
+            {
                 mobileOpen && (
                     <div className="fixed inset-0 bg-black/30 z-50">
                         <div className="absolute left-0 top-0 w-72 h-full bg-green-50 p-5 border-r border-green-100">
@@ -141,7 +164,10 @@ export default function Navbar() {
                                         key={route.href}
                                         href={route.href}
                                         onClick={() => setMobileOpen(false)}
-                                        className="text-green-800 font-medium"
+                                        className={`text-sm font-medium pb-1 border-r-10 transition ${pathname === route.href
+                                                ? "border-green-700 text-green-950"
+                                                : "border-transparent text-green-800 hover:text-green-950 hover:border-green-400"
+                                            }`}
                                     >
                                         {route.name}
                                     </Link>
@@ -172,7 +198,7 @@ export default function Navbar() {
                         </div>
                     </div>
                 )
-            } */}
+            }
         </>
     );
 }

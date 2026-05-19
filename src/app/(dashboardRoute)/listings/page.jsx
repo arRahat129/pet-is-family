@@ -15,7 +15,7 @@ const ListingsPage = async () => {
     const user = session?.user;
     // console.log(user)
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/adoption/owner/${user.id}`)
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pet/owner/${user.id}`)
     const petOwner = await res.json();
 
     console.log(petOwner);

@@ -45,10 +45,30 @@ const MyRequestsPage = async () => {
     const rejected = myRequests.filter(
         r => r.status?.toLowerCase() === "rejected"
     ).length;
+
+    const handleCancel = async (id) => {
+        try {
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_SERVER_URL}/adoption/${id}/cancel`,
+                {
+                    method: "PATCH",
+                }
+            );
+
+            if (!res.ok) throw new Error("Failed to cancel request");
+
+            toast.success("Request cancelled");
+
+            // 🔥 refresh page data
+            router.refresh(); // or re-fetch manually
+        }
+        catch (err) {
+            toast.error(err.message);
+        }
+    };
     return (
         <div className='max-w-7xl mx-auto px-4 sm:px-6 py-10'>
 
-            {/* HEADER */}
             <div className='mb-10'>
                 <span className='px-3 py-1 text-xs rounded-full bg-pink-100 text-pink-600 border border-pink-200'>
                     📋 My Requests
@@ -63,7 +83,6 @@ const MyRequestsPage = async () => {
                 </p>
             </div>
 
-            {/* STATS */}
             <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-10'>
 
                 <div className='p-5 rounded-2xl border bg-white shadow-sm'>
@@ -88,10 +107,8 @@ const MyRequestsPage = async () => {
 
             </div>
 
-            {/* TABLE (DESKTOP) */}
             <div className='hidden md:block rounded-2xl border border-gray-200 overflow-hidden bg-white shadow-sm'>
 
-                {/* HEADER ROW */}
                 <div className='grid grid-cols-5 gap-4 px-6 py-4 bg-gray-50 text-sm text-gray-600 font-semibold'>
                     <p>Pet Name</p>
                     <p>Request Date</p>
@@ -100,19 +117,16 @@ const MyRequestsPage = async () => {
                     <p className='text-right'>Actions</p>
                 </div>
 
-                {/* ROWS */}
                 {myRequests.map((request) => (
                     <div
                         key={request._id}
                         className='grid grid-cols-5 gap-4 px-6 py-4 border-t border-gray-100 items-center hover:bg-gray-50 transition'
                     >
 
-                        {/* PET NAME */}
                         <p className='font-medium text-gray-900'>
                             {request.petName}
                         </p>
 
-                        {/* REQUEST DATE */}
                         <p className='text-sm text-gray-600'>
                             {new Date(request.createdAt).toLocaleDateString()}
                         </p>
@@ -122,7 +136,6 @@ const MyRequestsPage = async () => {
                             {new Date(request.pickupDate).toLocaleDateString()}
                         </p>
 
-                        {/* STATUS */}
                         <div>
                             <span
                                 className={`px-3 py-1 text-xs rounded-full font-semibold
@@ -137,7 +150,6 @@ const MyRequestsPage = async () => {
                             </span>
                         </div>
 
-                        {/* ACTIONS */}
                         <div className='flex justify-end gap-2'>
                             <Link href={`/pets/${request.petId}`}>
                                 <Button size='sm' variant='outline'>
@@ -145,18 +157,22 @@ const MyRequestsPage = async () => {
                                 </Button>
                             </Link>
 
-                            {request.status.toLowerCase() !== "Approved" && (
-                                <Button size='sm' variant='danger'>
-                                    ✕ Cancel
-                                </Button>
-                            )}
+                            {request.status.toLowerCase() !== "approved" &&
+                                request.status.toLowerCase() !== "cancelled" && (
+                                    <Button
+                                        size='sm'
+                                        variant='danger'
+                                        onPress={() => handleCancel(request._id)}
+                                    >
+                                        ✕ Cancel
+                                    </Button>
+                                )}
                         </div>
 
                     </div>
                 ))}
             </div>
 
-            {/* MOBILE VIEW */}
             <div className='md:hidden space-y-4'>
 
                 {myRequests.map((request) => (
@@ -187,11 +203,17 @@ const MyRequestsPage = async () => {
                                 </Button>
                             </Link>
 
-                            {request.status.toLowerCase() !== "approved" && (
-                                <Button size='sm' variant='danger'>
-                                    Cancel
-                                </Button>
-                            )}
+                            {request.status.toLowerCase() !== "approved" &&
+                                request.status.toLowerCase() !== "cancelled" && (
+                                    <Button
+                                        size='sm'
+                                        variant='danger'
+                                        onPress={() => handleCancel(request._id)}
+                                        className='w-full'
+                                    >
+                                        Cancel
+                                    </Button>
+                                )}
                         </div>
 
                     </div>

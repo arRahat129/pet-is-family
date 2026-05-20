@@ -19,7 +19,7 @@ const Banner = () => {
 
                     <div className="mt-6 flex justify-center md:justify-start">
                         <Link
-                            href="/adopt"
+                            href="/all-pets"
                             className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition font-medium"
                         >
                             Adopt Now

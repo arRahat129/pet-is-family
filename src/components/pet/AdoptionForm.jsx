@@ -4,8 +4,10 @@ import { useState } from "react";
 import { Button, Card, Input, TextArea } from "@heroui/react";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 export default function AdoptionPanel({ petDetails }) {
+    const router = useRouter()
     const { data: session } = authClient.useSession();
     const user = session?.user;
 
@@ -13,9 +15,22 @@ export default function AdoptionPanel({ petDetails }) {
 
     const [loading, setLoading] = useState(false);
 
+    if (petDetails.adoptionStatus === "adopted") {
+        return (
+            <Card className="p-6 text-center border rounded-xl bg-red-50 text-red-700">
+                This pet has already been adopted.
+            </Card>
+        );
+    }
+
     const handleAdopt = async (e) => {
         e.preventDefault();
         setLoading(true);
+
+        if(!user){
+            router.push('/signin');
+            return;
+        }
 
         const form = new FormData(e.currentTarget);
 
@@ -71,7 +86,7 @@ export default function AdoptionPanel({ petDetails }) {
                 Request to Adopt
             </h2>
             {
-                user?.id === petDetails.userId
+                user?.id && petDetails.userId && user.id === petDetails.userId
                     ? <>
                         <Card className="p-6 border border-amber-200 bg-linear-to-br from-amber-50 to-orange-50 shadow-none rounded-xl text-center space-y-3">
                             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-amber-600 animate-pulse">

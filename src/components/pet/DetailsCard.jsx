@@ -177,12 +177,6 @@ const DetailsCard = ({ petDetails }) => {
                                     Back
                                 </Button>
                             </Link>
-
-                            <Button
-                                className="bg-green-600 text-white rounded-xl w-full sm:w-auto"
-                            >
-                                Adopt Now
-                            </Button>
                         </div>
                     </div>
                 </div>

@@ -13,7 +13,7 @@ import {
     PlusCircle,
     Layers,
     X,
-    LayoutDashboard 
+    LayoutDashboard
 } from "lucide-react";
 import logoImg from "@/assets/logo.png";
 import { authClient } from "@/lib/auth-client";
@@ -39,7 +39,7 @@ export default function DashboardLayout({ children }) {
 
     const dashboardRoutes = [
         { name: "Home", href: "/", icon: Home },
-        { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard  },
+        { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
         { name: "My Requests", href: "/my-requests", icon: FileText },
         { name: "Add Pet", href: "/add-pet", icon: PlusCircle },
         { name: "My Listings", href: "/listings", icon: Layers },
@@ -136,23 +136,45 @@ export default function DashboardLayout({ children }) {
                 </nav>
 
 
-                <div className="mt-auto border-t border-green-100 pt-4 flex items-center gap-3 px-2">
-                    <Avatar>
-                        <Avatar.Image
-                            src={user?.image || ""}
-                            name={user?.name || "User"}
-                            size="sm"
-                        />
-                        <Avatar.Fallback>{user?.name?.[0]}</Avatar.Fallback>
-                    </Avatar>
-                    <div className="flex flex-col min-w-0">
-                        <span className="text-sm font-semibold text-green-900 truncate">
-                            {user?.name || "Guest"}
-                        </span>
-                        <span className="text-xs text-green-700 truncate">
-                            {user?.email || ""}
-                        </span>
-                    </div>
+                <div className="mt-auto border-t border-green-100 pt-4 px-2">
+                    {
+                        user ? (
+                            <div className="flex items-center gap-3">
+                                <Avatar>
+                                    <Avatar.Image
+                                        src={user?.image || ""}
+                                        name={user?.name || "User"}
+                                        size="sm"
+                                    />
+                                    <Avatar.Fallback>{user?.name?.[0]}</Avatar.Fallback>
+                                </Avatar>
+
+                                <div className="flex flex-col min-w-0">
+                                    <span className="text-sm font-semibold text-green-900 truncate">
+                                        {user?.name}
+                                    </span>
+
+                                    <span className="text-xs text-green-700 truncate">
+                                        {user?.email}
+                                    </span>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col gap-2">
+                                <Link href="/signin">
+                                    <button className="w-full rounded-xl border border-green-200 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-50 transition">
+                                        Login
+                                    </button>
+                                </Link>
+
+                                <Link href="/signup">
+                                    <button className="w-full rounded-xl bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 transition">
+                                        Join for Free
+                                    </button>
+                                </Link>
+                            </div>
+                        )
+                    }
                 </div>
             </aside>
 
@@ -185,48 +207,72 @@ export default function DashboardLayout({ children }) {
 
 
                     <div className="relative">
-                        <button
-                            onClick={() => setUserMenuOpen((p) => !p)}
-                            className="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-green-100 transition"
-                        >
-
-                            <Avatar>
-                                <Avatar.Image
-                                    referrerPolicy="no-referrer"
-                                    src={user?.image || ""}
-                                    name={user?.name || "User"}
-                                    size="sm"
-                                />
-                                <Avatar.Fallback>{user?.name?.[0]}</Avatar.Fallback>
-                            </Avatar>
-                            <div className="hidden sm:block text-left">
-                                {/* Dynamic Name and Email */}
-                                <p className="text-sm font-medium text-green-900">{user?.name || "Guest"}</p>
-                                <p className="text-xs text-green-700">{user?.email || ""}</p>
-                            </div>
-                        </button>
-
                         {
-                            userMenuOpen && (
-                                <div className="absolute right-0 mt-2 w-48 bg-white border border-green-100 rounded-lg shadow-lg overflow-hidden z-50">
-                                    <Link
-                                        href="/"
-                                        onClick={() => setUserMenuOpen(false)}
-                                        className="block px-4 py-2 text-sm hover:bg-green-50 text-green-900"
+                            user ? (
+                                <>
+                                    <button
+                                        onClick={() => setUserMenuOpen((p) => !p)}
+                                        className="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-green-100 transition"
                                     >
-                                        Return to Website
+                                        <Avatar>
+                                            <Avatar.Image
+                                                referrerPolicy="no-referrer"
+                                                src={user?.image || ""}
+                                                name={user?.name || "User"}
+                                                size="sm"
+                                            />
+                                            <Avatar.Fallback>{user?.name?.[0]}</Avatar.Fallback>
+                                        </Avatar>
+
+                                        <div className="hidden sm:block text-left">
+                                            <p className="text-sm font-medium text-green-900">
+                                                {user?.name}
+                                            </p>
+
+                                            <p className="text-xs text-green-700">
+                                                {user?.email}
+                                            </p>
+                                        </div>
+                                    </button>
+
+                                    {
+                                        userMenuOpen && (
+                                            <div className="absolute right-0 mt-2 w-48 bg-white border border-green-100 rounded-lg shadow-lg overflow-hidden z-50">
+                                                <Link
+                                                    href="/"
+                                                    onClick={() => setUserMenuOpen(false)}
+                                                    className="block px-4 py-2 text-sm hover:bg-green-50 text-green-900"
+                                                >
+                                                    Return to Website
+                                                </Link>
+
+                                                <button
+                                                    onClick={() => {
+                                                        setUserMenuOpen(false);
+                                                        handleLogout();
+                                                    }}
+                                                    className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-green-50 border-t border-slate-50"
+                                                >
+                                                    <LogOut size={16} />
+                                                    Logout
+                                                </button>
+                                            </div>
+                                        )
+                                    }
+                                </>
+                            ) : (
+                                <div className="flex items-center gap-2">
+                                    <Link href="/signin">
+                                        <button className="rounded-xl border border-green-200 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-50 transition">
+                                            Login
+                                        </button>
                                     </Link>
 
-                                    <button
-                                        onClick={() => {
-                                            setUserMenuOpen(false);
-                                            handleLogout();
-                                        }}
-                                        className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-green-50 border-t border-slate-50"
-                                    >
-                                        <LogOut size={16} />
-                                        Logout
-                                    </button>
+                                    <Link href="/signup">
+                                        <button className="rounded-xl bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 transition">
+                                            Join for Free
+                                        </button>
+                                    </Link>
                                 </div>
                             )
                         }

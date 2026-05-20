@@ -1,11 +1,28 @@
-"use client";
-
 import React from "react";
 import Marquee from "react-fast-marquee";
 
-const TopMarquee = () => {
+const TopMarquee = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/adoption`);
+    const data = await res.json();
+    // console.log(data);
+
+    const total = data.length;
+
+    const pending = data.filter(item => item.status === "pending").length;
+    const approved = data.filter(item => item.status === "approved").length;
+
+    const updates = [
+        `Secure adoption request system`,
+        `Total requests: ${total}`,
+        `All pets are verified before listing`,
+        `Pending: ${pending}`,
+        `Health & vaccination records are checked`,
+        `Approved: ${approved}`,
+        `Verified pet owners only`,
+    ];
+
     return (
-        <div className="bg-white border-b border-green-100 px-2 md:px-0">
+        <div className="bg-white border border-green-500 px-2 md:px-0">
 
             <div className="max-w-7xl mx-auto flex items-center px-4 py-3 gap-4">
 
@@ -17,25 +34,17 @@ const TopMarquee = () => {
 
                 <div className="flex-1 overflow-hidden">
                     <Marquee
-                        speed={45}
+                        speed={60}
                         gradient={false}
                         pauseOnHover={true}
                     >
-                        <span className="mx-8 text-green-900 font-medium">
-                            🐶 Adopt, don’t shop — give a pet a loving home
-                        </span>
-
-                        <span className="mx-8 text-green-900 font-medium">
-                            🐱 New rescued pets available for adoption this week
-                        </span>
-
-                        <span className="mx-8 text-green-900 font-medium">
-                            ❤️ Your donation helps save animal lives
-                        </span>
-
-                        <span className="mx-8 text-green-900 font-medium">
-                            🐾 Every pet deserves care, love, and safety
-                        </span>
+                        {
+                            updates.map((update, i) => (
+                                <span key={i} className="mx-4 text-green-900 font-medium">
+                                    {update}
+                                </span>
+                            ))
+                        }
                     </Marquee>
                 </div>
 

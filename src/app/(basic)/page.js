@@ -1,4 +1,5 @@
 import Banner from "@/components/homepage/Banner";
+import FeaturedPets from "@/components/homepage/FeaturedPets";
 import HowWeHelp from "@/components/homepage/HowWeHelp";
 import PetCareTips from "@/components/homepage/PetCareTips";
 import SuccessStories from "@/components/homepage/SuccessStories";
@@ -10,6 +11,7 @@ export default function Home() {
         <div>
             <Banner />
             <TopMarquee />
+            <FeaturedPets />
             <WhyAdopt />
             <SuccessStories />
             <PetCareTips />

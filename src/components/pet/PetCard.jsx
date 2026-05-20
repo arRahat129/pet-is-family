@@ -17,6 +17,7 @@ const PetCard = ({ petData }) => {
         breed,
         gender,
         adoptionFee,
+        adoptionStatus
     } = petData;
 
     return (
@@ -40,6 +41,21 @@ const PetCard = ({ petData }) => {
                         {species}
                     </div>
                 </Chip>
+
+                <div className="absolute top-4 right-4">
+                    <Chip
+                        size="sm"
+                        className={`font-bold uppercase text-[10px] tracking-wider
+                            ${adoptionStatus === "adopted"
+                                ? "bg-red-100 text-red-600"
+                                : "bg-green-100 text-green-700"
+                            }
+                        `}
+                    >
+                        {adoptionStatus || "available"}
+                    </Chip>
+                </div>
+
             </div>
 
             <div className="p-5 space-y-4">
@@ -74,21 +90,14 @@ const PetCard = ({ petData }) => {
 
                 <Separator />
 
-                <div className="flex gap-3">
-                    <Link href={`/all-pets/${_id}`}>
+                <div className="flex">
+                    <Link href={`/all-pets/${_id}`} className="w-full">
                         <Button
                             className="w-full bg-green-600 text-white font-medium rounded-xl"
                         >
-                            View Details
+                            View Details & Adopt Now!
                         </Button>
                     </Link>
-
-                    <Button
-                        variant="outline"
-                        className="rounded-xl hover:bg-purple-100"
-                    >
-                        Adopt Now
-                    </Button>
                 </div>
             </div>
         </Card>

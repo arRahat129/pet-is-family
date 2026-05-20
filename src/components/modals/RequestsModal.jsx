@@ -1,10 +1,12 @@
 'use client';
 
 import { Button, Modal } from '@heroui/react';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 
 const RequestsModal = ({ pet }) => {
+    const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -26,6 +28,26 @@ const RequestsModal = ({ pet }) => {
         finally {
             setLoading(false);
         }
+    };
+
+    const handleApprove = async (id) => {
+        await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/adoption/${id}/approve`, {
+            method: "PATCH",
+        });
+
+        toast.success("Request approved");
+        loadRequests();
+        router.refresh();
+    };
+
+    const handleReject = async (id) => {
+        await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/adoption/${id}/reject`, {
+            method: "PATCH",
+        });
+
+        toast.success("Request rejected");
+        loadRequests();
+        router.refresh();
     };
 
     return (
@@ -92,6 +114,25 @@ const RequestsModal = ({ pet }) => {
 
                                         <div className="text-xs text-neutral-600 dark:text-neutral-300 italic bg-white dark:bg-neutral-900 p-3 rounded-xl border border-neutral-100 dark:border-neutral-800 leading-relaxed">
                                             {`${r.message} || "No contextual pitch message provided."`}
+                                        </div>
+
+
+                                        <div className="flex gap-2 mt-2">
+                                            <Button
+                                                size="sm"
+                                                onPress={() => handleApprove(r._id)}
+                                                isDisabled={pet.adoptionStatus === "adopted"}
+                                            >
+                                                Approve
+                                            </Button>
+
+                                            <Button
+                                                size="sm"
+                                                variant="danger"
+                                                onPress={() => handleReject(r._id)}
+                                            >
+                                                Reject
+                                            </Button>
                                         </div>
                                     </div>
                                 ))

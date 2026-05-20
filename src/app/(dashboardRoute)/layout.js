@@ -12,7 +12,8 @@ import {
     FileText,
     PlusCircle,
     Layers,
-    X
+    X,
+    LayoutDashboard 
 } from "lucide-react";
 import logoImg from "@/assets/logo.png";
 import { authClient } from "@/lib/auth-client";
@@ -38,6 +39,7 @@ export default function DashboardLayout({ children }) {
 
     const dashboardRoutes = [
         { name: "Home", href: "/", icon: Home },
+        { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard  },
         { name: "My Requests", href: "/my-requests", icon: FileText },
         { name: "Add Pet", href: "/add-pet", icon: PlusCircle },
         { name: "My Listings", href: "/listings", icon: Layers },

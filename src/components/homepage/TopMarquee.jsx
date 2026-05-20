@@ -4,18 +4,18 @@ import React from "react";
 import Marquee from "react-fast-marquee";
 
 const TopMarquee = async () => {
-    const { token } = await auth.api.getToken({
-        headers: await headers()
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/adoption`, {
+        cache: "no-store"
     });
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/adoption`, {
-        headers: {
-            authorization: `Bearer ${token}`
-        }
-    });
     if (!res.ok) {
-        throw new Error("Failed to fetch data");
+        return (
+            <div className="text-center text-sm text-gray-500 py-2">
+                Updates unavailable
+            </div>
+        );
     }
+    
     const data = await res.json();
     // console.log(data);
 

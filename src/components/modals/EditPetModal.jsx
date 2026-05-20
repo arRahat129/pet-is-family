@@ -17,6 +17,7 @@ import {
 import { FolderPlus, TrashBin } from "@gravity-ui/icons";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 const EditPetModal = ({ pet }) => {
 
@@ -61,12 +62,15 @@ const EditPetModal = ({ pet }) => {
             updatedPet.species = speciesValue;
             updatedPet.gender = genderValue;
 
+            const { data: tokenData } = await authClient.token();
+
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_SERVER_URL}/pet/${_id}`,
                 {
                     method: "PATCH",
                     headers: {
-                        "content-type": "application/json"
+                        "content-type": "application/json",
+                        authorization: `Bearer ${tokenData?.token}`
                     },
                     body: JSON.stringify(updatedPet)
                 }
@@ -153,7 +157,7 @@ const EditPetModal = ({ pet }) => {
                                             <Select
                                                 selectedKeys={new Set([speciesValue])}
                                                 onSelectionChange={(keys) =>
-                                                    setSpeciesValue(Array.from(keys)[0])
+                                                    setSpeciesValue(Array.from(keys))
                                                 }
                                             >
                                                 <Select.Trigger className="rounded-xl">
@@ -187,7 +191,7 @@ const EditPetModal = ({ pet }) => {
                                             <Select
                                                 selectedKeys={new Set([genderValue])}
                                                 onSelectionChange={(keys) =>
-                                                    setGenderValue(Array.from(keys)[0])
+                                                    setGenderValue(Array.from(keys))
                                                 }
                                             >
                                                 <Select.Trigger className="rounded-xl">

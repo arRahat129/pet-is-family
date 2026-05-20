@@ -1,5 +1,6 @@
 'use client';
 
+import { authClient } from '@/lib/auth-client';
 import { Button, Modal } from '@heroui/react';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -15,10 +16,16 @@ const RequestsModal = ({ pet }) => {
         setIsOpen(true);
         setLoading(true);
 
+        const { data: tokenData } = await authClient.token();
+        // console.log(tokenData);
+
         try {
             const res = await fetch(
-                `${process.env.NEXT_PUBLIC_SERVER_URL}/adoption/pet/${pet._id}`
-            );
+                `${process.env.NEXT_PUBLIC_SERVER_URL}/adoption/pet/${pet._id}`, {
+                headers: {
+                    authorization: `Bearer ${tokenData?.token}`
+                }
+            });
             const data = await res.json();
             setRequests(data);
         }
@@ -31,8 +38,15 @@ const RequestsModal = ({ pet }) => {
     };
 
     const handleApprove = async (id) => {
+        const { data: tokenData } = await authClient.token();
+        // console.log(tokenData);
+
         await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/adoption/${id}/approve`, {
             method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                authorization: `Bearer ${tokenData?.token}`
+            },
         });
 
         toast.success("Request approved");
@@ -41,8 +55,15 @@ const RequestsModal = ({ pet }) => {
     };
 
     const handleReject = async (id) => {
+        const { data: tokenData } = await authClient.token();
+        // console.log(tokenData);
+
         await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/adoption/${id}/reject`, {
             method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                authorization: `Bearer ${tokenData?.token}`
+            },
         });
 
         toast.success("Request rejected");

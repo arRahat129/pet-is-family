@@ -16,7 +16,15 @@ const ListingsPage = async () => {
     const user = session?.user;
     // console.log(user)
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pet/owner/${user.id}`)
+    const { token } = await auth.api.getToken({
+        headers: await headers()
+    })
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pet/owner/${user.id}`, {
+        headers: {
+            authorization: `Bearer ${token}`
+        }
+    });
     const petOwner = await res.json();
 
     console.log(petOwner);

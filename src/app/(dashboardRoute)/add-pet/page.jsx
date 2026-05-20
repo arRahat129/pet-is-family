@@ -52,6 +52,10 @@ const AddPetPage = () => {
         };
 
         setIsPending(true);
+
+        const { data: tokenData } = await authClient.token();
+        // console.log(tokenData);
+
         try {
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_SERVER_URL}/pet`,
@@ -59,6 +63,7 @@ const AddPetPage = () => {
                     method: "POST",
                     headers: {
                         "content-type": "application/json",
+                        authorization: `Bearer ${tokenData?.token}`
                     },
                     body: JSON.stringify(petData),
                 }

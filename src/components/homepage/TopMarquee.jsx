@@ -1,8 +1,18 @@
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import React from "react";
 import Marquee from "react-fast-marquee";
 
 const TopMarquee = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/adoption`);
+    const { token } = await auth.api.getToken({
+        headers: await headers()
+    });
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/adoption`, {
+        headers: {
+            authorization: `Bearer ${token}`
+        }
+    });
     const data = await res.json();
     // console.log(data);
 

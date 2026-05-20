@@ -27,7 +27,7 @@ export default function AdoptionPanel({ petDetails }) {
         e.preventDefault();
         setLoading(true);
 
-        if(!user){
+        if (!user) {
             router.push('/signin');
             return;
         }
@@ -55,6 +55,10 @@ export default function AdoptionPanel({ petDetails }) {
             createdAt: new Date(),
         };
 
+        const { data: tokenData } = await authClient.token();
+        // console.log(tokenData);
+        
+
         try {
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_SERVER_URL}/adoption`,
@@ -62,6 +66,7 @@ export default function AdoptionPanel({ petDetails }) {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
+                        authorization: `Bearer ${tokenData?.token}`
                     },
                     body: JSON.stringify(payload),
                 }

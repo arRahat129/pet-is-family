@@ -1,12 +1,24 @@
 import AdoptionForm from '@/components/pet/AdoptionForm';
 import DetailsCard from '@/components/pet/DetailsCard';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 import React from 'react';
 
 const PetDetailsCard = async ({ params }) => {
     const { id } = await params;
     // console.log(id);
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pet/${id}`);
+    const { token } = await auth.api.getToken({
+        headers: await headers()
+    })
+
+    // console.log(token)
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pet/${id}`, {
+        headers: {
+            authorization: `Bearer ${token}`
+        }
+    });
 
     const petDetails = await res.json();
     // console.log(petDetails);
@@ -40,7 +52,7 @@ const PetDetailsCard = async ({ params }) => {
                 </div>
 
             </div>
-            
+
         </div>
     );
 };

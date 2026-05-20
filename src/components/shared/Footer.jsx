@@ -22,7 +22,7 @@ export default function Footer() {
                     </div>
 
                     {/* CONTACT */}
-                    <div>
+                    <div className="mx-auto">
                         <h3 className="text-md font-semibold text-green-900 mb-3">
                             Contact Information
                         </h3>
@@ -47,7 +47,7 @@ export default function Footer() {
                     </div>
 
                     {/* SOCIAL */}
-                    <div>
+                    <div className="ml-auto px-10">
                         <h3 className="text-md font-semibold text-green-900 mb-3">
                             Social Links
                         </h3>

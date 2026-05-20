@@ -11,9 +11,16 @@ const Dashboard = async () => {
 
     const user = session?.user;
 
+    const { token } = await auth.api.getToken({
+        headers: await headers()
+    })
+
     const petRes = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/pet/owner/${user.id}`
-    );
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/pet/owner/${user.id}`, {
+        headers: {
+            authorization: `Bearer ${token}`
+        }
+    });
     const pets = await petRes.json();
 
     const totalPets = pets.length;
@@ -21,8 +28,11 @@ const Dashboard = async () => {
     const availablePets = pets.filter(p => p.adoptionStatus?.toLowerCase() === "available").length;
 
     const reqRes = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/adoption/adopter/${user.id}`
-    );
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/adoption/adopter/${user.id}`, {
+        headers: {
+            authorization: `Bearer ${token}`
+        }
+    });
     const requests = await reqRes.json();
 
     const totalReq = requests.length;

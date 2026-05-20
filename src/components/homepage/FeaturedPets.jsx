@@ -2,9 +2,18 @@ import React from 'react';
 import PetCard from '../pet/PetCard';
 
 const FeaturedPets = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pet`);
+    const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/pet`,
+        {
+            cache: "no-store"
+        }
+    );
     if (!res.ok) {
-        throw new Error("Failed to fetch data");
+        return (
+            <section className="py-16 text-center text-gray-500">
+                Pets temporarily unavailable
+            </section>
+        );
     }
     const allPetData = await res.json();
     // console.log(allPetData);

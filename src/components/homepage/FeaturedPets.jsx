@@ -2,7 +2,7 @@ import React from 'react';
 import PetCard from '../pet/PetCard';
 
 const FeaturedPets = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pet` || 'https://pet-is-family-server.vercel.app');
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pet`);
     if (!res.ok) {
         throw new Error("Failed to fetch data");
     }

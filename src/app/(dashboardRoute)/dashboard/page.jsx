@@ -21,6 +21,12 @@ const Dashboard = async () => {
             authorization: `Bearer ${token}`
         }
     });
+
+    if (!petRes.ok) {
+        console.log("PET API ERROR:", await petRes.text());
+        return;
+    }
+
     const pets = await petRes.json();
 
     const totalPets = pets.length;

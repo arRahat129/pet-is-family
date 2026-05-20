@@ -26,6 +26,9 @@ const RequestsModal = ({ pet }) => {
                     authorization: `Bearer ${tokenData?.token}`
                 }
             });
+            if (!res.ok) {
+                throw new Error("Failed to fetch data");
+            }
             const data = await res.json();
             setRequests(data);
         }

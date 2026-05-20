@@ -25,6 +25,11 @@ const ListingsPage = async () => {
             authorization: `Bearer ${token}`
         }
     });
+
+    if (!res.ok) {
+        throw new Error("Failed to fetch data");
+    }
+    
     const petOwner = await res.json();
 
     console.log(petOwner);

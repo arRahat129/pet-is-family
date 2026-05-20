@@ -2,8 +2,10 @@ import React from 'react';
 import PetCard from '../pet/PetCard';
 
 const FeaturedPets = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pet`);
-
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pet` || 'https://pet-is-family-server.vercel.app');
+    if (!res.ok) {
+        throw new Error("Failed to fetch data");
+    }
     const allPetData = await res.json();
     // console.log(allPetData);
     const featuredPetData = allPetData.slice(0, 6);

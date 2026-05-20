@@ -20,6 +20,10 @@ const PetDetailsCard = async ({ params }) => {
         }
     });
 
+    if (!res.ok) {
+        throw new Error("Failed to fetch data");
+    }
+
     const petDetails = await res.json();
     // console.log(petDetails);
 

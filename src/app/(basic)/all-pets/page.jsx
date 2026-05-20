@@ -4,6 +4,10 @@ import React from 'react';
 const AllPets = async () => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pet`);
 
+    if (!res.ok) {
+        throw new Error("Failed to fetch data");
+    }
+
     const allPetData = await res.json();
     // console.log(allPetData);
 

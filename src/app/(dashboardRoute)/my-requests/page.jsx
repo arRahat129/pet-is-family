@@ -34,6 +34,10 @@ const MyRequestsPage = async () => {
         }
     );
 
+    if (!res.ok) {
+        throw new Error("Failed to fetch data");
+    }
+
     const myRequests = await res.json();
 
     const total = myRequests.length;

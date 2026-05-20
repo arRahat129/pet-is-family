@@ -128,8 +128,8 @@ export default function MyRequestsClient({ myRequests, stats }) {
                             ) && (
                                     <Button
                                         size='sm'
-                                        color="danger"
-                                        onPress={() => handleDelete(request._id)}
+                                        variant="danger"
+                                        onPress={() => handleCancel(request._id)}
                                     >
                                         <TrashBin /> Delete
                                     </Button>

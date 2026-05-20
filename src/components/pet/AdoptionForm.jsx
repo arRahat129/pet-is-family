@@ -57,7 +57,7 @@ export default function AdoptionPanel({ petDetails }) {
 
         const { data: tokenData } = await authClient.token();
         // console.log(tokenData);
-        
+
 
         try {
             const res = await fetch(
@@ -71,6 +71,10 @@ export default function AdoptionPanel({ petDetails }) {
                     body: JSON.stringify(payload),
                 }
             );
+
+            if (!res.ok) {
+                throw new Error("Failed to fetch data");
+            }
 
             const data = await res.json();
             toast.success(`Successfully Requested to adopt ${petDetails.petName}`)

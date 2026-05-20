@@ -1,3 +1,4 @@
+import EditPetModal from '@/components/modals/EditPetModal';
 import RequestsModal from '@/components/modals/RequestsModal';
 import { auth } from '@/lib/auth';
 import { Button } from '@heroui/react';
@@ -98,9 +99,8 @@ const ListingsPage = async () => {
                                     </Button>
                                 </Link>
 
-                                <Button size='sm' variant='' className='w-full font-semibold rounded-xl bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300'>
-                                    Edit
-                                </Button>
+
+                                <EditPetModal pet={pet} />
 
                                 <Button size='sm' variant='danger' className='w-full font-bold rounded-xl'>
                                     Delete

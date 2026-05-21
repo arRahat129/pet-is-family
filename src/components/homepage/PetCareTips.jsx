@@ -1,6 +1,7 @@
 import { ArrowRight } from "@gravity-ui/icons";
 import Image from "next/image";
 import React from "react";
+import { TextMotion } from "../motion/TextMotion";
 
 const PetCareTips = () => {
     return (
@@ -21,18 +22,18 @@ const PetCareTips = () => {
                             height={100}
                         />
                     </div>
+                    <TextMotion>
+                        <ul className="text-green-800 dark:text-gray-300 space-y-3 text-sm md:text-base">
 
-                    <ul className="text-green-800 dark:text-gray-300 space-y-3 text-sm md:text-base">
+                            <li className="flex items-center gap-2"><ArrowRight />Provide clean water and healthy food daily</li>
+                            <li className="flex items-center gap-2"><ArrowRight />Regular vet checkups are important</li>
+                            <li className="flex items-center gap-2"><ArrowRight />Give your pet enough exercise and playtime</li>
+                            <li className="flex items-center gap-2"><ArrowRight />Keep vaccinations up to date</li>
+                            <li className="flex items-center gap-2"><ArrowRight />Show love, patience, and care</li>
 
-                        <li className="flex items-center gap-2"><ArrowRight />Provide clean water and healthy food daily</li>
-                        <li className="flex items-center gap-2"><ArrowRight />Regular vet checkups are important</li>
-                        <li className="flex items-center gap-2"><ArrowRight />Give your pet enough exercise and playtime</li>
-                        <li className="flex items-center gap-2"><ArrowRight />Keep vaccinations up to date</li>
-                        <li className="flex items-center gap-2"><ArrowRight />Show love, patience, and care</li>
-
-                    </ul>
+                        </ul>
+                    </TextMotion>
                 </div>
-
             </div>
         </section>
     );

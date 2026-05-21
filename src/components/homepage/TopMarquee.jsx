@@ -1,5 +1,6 @@
 import React from "react";
 import Marquee from "react-fast-marquee";
+import MotionButton from "../motion/MotionButton";
 
 const TopMarquee = async () => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/adoption`, {
@@ -34,9 +35,9 @@ const TopMarquee = async () => {
             <div className="max-w-7xl mx-auto flex items-center px-4 py-3 gap-4">
 
                 <div className="shrink-0">
-                    <button className="bg-green-600 text-white text-sm px-4 py-1 rounded-full">
+                    <MotionButton>
                         Latest Updates
-                    </button>
+                    </MotionButton>
                 </div>
 
                 <div className="flex-1 overflow-hidden">

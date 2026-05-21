@@ -21,6 +21,7 @@
 11. mongodb
 12. @better-auth/mongo-adapter
 13. @gravity-ui/icons
+14. framer-motion
 ```
 
 ## ✈️ Hosted Backend Server

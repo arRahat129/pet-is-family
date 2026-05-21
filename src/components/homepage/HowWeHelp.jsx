@@ -1,18 +1,21 @@
 import React from "react";
+import MotionWrapperStatic from "../motion/MotionWrapperStatic";
 
 const HowWeHelp = () => {
     return (
         <section className="bg-white dark:bg-gray-950 py-16">
             <div className="max-w-7xl mx-auto px-4 text-center">
 
-                <h2 className="text-3xl font-bold text-green-900 dark:text-green-400">
-                    How We Help Pets
-                </h2>
+                <MotionWrapperStatic>
+                    <h2 className="text-3xl font-bold text-green-900 dark:text-green-400">
+                        How We Help Pets
+                    </h2>
 
-                <p className="mt-4 text-green-700 dark:text-gray-300 max-w-2xl mx-auto text-sm md:text-base">
-                    We rescue abandoned animals, provide medical care, and connect them
-                    with loving families through adoption programs.
-                </p>
+                    <p className="mt-4 text-green-700 dark:text-gray-300 max-w-2xl mx-auto text-sm md:text-base">
+                        We rescue abandoned animals, provide medical care, and connect them
+                        with loving families through adoption programs.
+                    </p>
+                </MotionWrapperStatic>
 
             </div>
         </section>

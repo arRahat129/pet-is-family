@@ -26,7 +26,7 @@ export default function AdoptionPanel({ petDetails }) {
         setLoading(true);
 
         if (!user) {
-            router.push('/signin');
+            router.push("/signin");
             return;
         }
 
@@ -58,16 +58,16 @@ export default function AdoptionPanel({ petDetails }) {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        authorization: `Bearer ${tokenData?.token}`
+                        authorization: `Bearer ${tokenData?.token}`,
                     },
                     body: JSON.stringify(payload),
                 }
             );
 
-            if (!res.ok) return;
+            if (!res.ok) throw new Error("Request failed");
 
             await res.json();
-            toast.success(`Successfully Requested to adopt ${petDetails.petName}`);
+            toast.success(`Successfully requested to adopt ${petDetails.petName}`);
         } catch (error) {
             toast.error(error.message);
         } finally {
@@ -76,8 +76,17 @@ export default function AdoptionPanel({ petDetails }) {
     };
 
     return (
-        <form className="space-y-4 bg-white dark:bg-neutral-950 p-5 rounded-xl border dark:border-neutral-800"
+        <form
             onSubmit={handleAdopt}
+            className="
+                w-full max-w-2xl mx-auto
+                space-y-5
+                p-5 md:p-6
+                bg-white dark:bg-neutral-950
+                border border-neutral-200 dark:border-neutral-800
+                rounded-2xl
+                shadow-sm
+            "
         >
             <h2 className="text-lg font-semibold text-green-900 dark:text-green-400">
                 Request to Adopt
@@ -90,30 +99,50 @@ export default function AdoptionPanel({ petDetails }) {
                     </h3>
                 </Card>
             ) : (
-                <>
-                    <label className="text-sm dark:text-gray-300">Pet Name</label>
-                    <Input value={petDetails.petName} readOnly />
+                <div className="space-y-4">
+                    <div>
+                        <label className="text-sm text-neutral-600 dark:text-neutral-300">
+                            Pet Name
+                        </label>
+                        <Input value={petDetails.petName} readOnly className="w-full" />
+                    </div>
 
-                    <label className="text-sm dark:text-gray-300">Owner Name</label>
-                    <Input value={user?.name || ""} readOnly />
+                    <div>
+                        <label className="text-sm text-neutral-600 dark:text-neutral-300">
+                            Your Name
+                        </label>
+                        <Input value={user?.name || ""} readOnly className="w-full" />
+                    </div>
 
-                    <label className="text-sm dark:text-gray-300">Owner Email</label>
-                    <Input value={user?.email || ""} readOnly />
+                    <div>
+                        <label className="text-sm text-neutral-600 dark:text-neutral-300">
+                            Your Email
+                        </label>
+                        <Input value={user?.email || ""} readOnly className="w-full" />
+                    </div>
 
-                    <label className="text-sm dark:text-gray-300">Pickup Date</label>
-                    <Input name="pickupDate" type="date" required />
+                    <div>
+                        <label className="text-sm text-neutral-600 dark:text-neutral-300">
+                            Pickup Date
+                        </label>
+                        <Input name="pickupDate" type="date" required className="w-full" />
+                    </div>
 
-                    <label className="text-sm dark:text-gray-300">Message</label>
-                    <TextArea name="message" required />
+                    <div>
+                        <label className="text-sm text-neutral-600 dark:text-neutral-300">
+                            Message
+                        </label>
+                        <TextArea name="message" required className="w-full" />
+                    </div>
 
                     <Button
                         type="submit"
-                        className="w-full bg-green-600 text-white"
+                        className="w-full bg-green-600 hover:bg-green-700 text-white"
                         isDisabled={loading}
                     >
                         {loading ? "Sending..." : "Adopt Pet"}
                     </Button>
-                </>
+                </div>
             )}
         </form>
     );

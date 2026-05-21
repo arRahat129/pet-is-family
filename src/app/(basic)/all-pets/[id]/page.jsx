@@ -21,7 +21,7 @@ const PetDetailsCard = async ({ params }) => {
 
     if (!res.ok) {
         return (
-            <section className="py-16 text-center text-gray-500 dark:text-gray-400">
+            <section className="py-16 text-center text-gray-500 dark:text-gray-400 bg-white dark:bg-black">
                 Pet temporarily unavailable
             </section>
         );
@@ -33,7 +33,7 @@ const PetDetailsCard = async ({ params }) => {
     return (
         <div className="max-w-7xl mx-auto px-4 py-10 bg-white dark:bg-black">
 
-            <div className="mb-10">
+            <div className="mb-10 bg-white dark:bg-black">
                 <h1 className="text-3xl md:text-4xl font-bold text-green-800 dark:text-white">
                     Meet {petName}
                 </h1>

@@ -2,7 +2,9 @@ import PetCard from '@/components/pet/PetCard';
 import React from 'react';
 
 const AllPets = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pet`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pet`, {
+        cache: "no-store"
+    });
 
     if (!res.ok) {
         return (

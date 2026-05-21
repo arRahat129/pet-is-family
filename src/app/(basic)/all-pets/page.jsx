@@ -5,7 +5,11 @@ const AllPets = async () => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pet`);
 
     if (!res.ok) {
-        throw new Error("Failed to fetch data");
+        return (
+            <section className="py-16 text-center text-gray-500">
+                Pets temporarily unavailable
+            </section>
+        );
     }
 
     const allPetData = await res.json();

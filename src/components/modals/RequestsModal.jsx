@@ -27,7 +27,11 @@ const RequestsModal = ({ pet }) => {
                 }
             });
             if (!res.ok) {
-                throw new Error("Failed to fetch data");
+                return (
+            <section className="py-16 text-center text-gray-500">
+                Pets temporarily unavailable
+            </section>
+        );
             }
             const data = await res.json();
             setRequests(data);

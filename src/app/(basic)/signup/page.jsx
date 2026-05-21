@@ -3,12 +3,14 @@
 import { authClient } from '@/lib/auth-client';
 import { Button, Card, FieldError, Input, Label, Separator, TextField } from '@heroui/react';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { FcGoogle } from 'react-icons/fc';
 
 const SignUpPage = () => {
+    const router = useRouter();
+
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -49,7 +51,7 @@ const SignUpPage = () => {
 
         if (data) {
             toast.success(`Sign Up Successfully! -> ${data?.user?.name} Please Login...`);
-            redirect('/signin');
+            router.push('/');
         }
 
         if (error) {

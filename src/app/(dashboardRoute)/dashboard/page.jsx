@@ -1,4 +1,4 @@
-import React, { cache } from "react";
+import React from "react";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { Button } from "@heroui/react";
@@ -13,7 +13,7 @@ const Dashboard = async () => {
 
     if (!user) {
         return (
-            <div className="p-10 text-center">
+            <div className="p-10 text-center text-green-800 dark:text-neutral-400 font-medium">
                 Please login to view dashboard
             </div>
         );
@@ -21,18 +21,20 @@ const Dashboard = async () => {
 
     const { token } = await auth.api.getToken({
         headers: await headers()
-    })
+    });
 
     const petRes = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/pet/owner/${user.id}`, {
-        headers: {
-            authorization: `Bearer ${token}`
-        },
-    });
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/pet/owner/${user.id}`,
+        {
+            headers: {
+                authorization: `Bearer ${token}`
+            },
+        }
+    );
 
     if (!petRes.ok) {
         console.log("PET API ERROR:", await petRes.text());
-        return;
+        return null;
     }
 
     const pets = await petRes.json();
@@ -42,11 +44,14 @@ const Dashboard = async () => {
     const availablePets = pets.filter(p => p.adoptionStatus?.toLowerCase() === "available").length;
 
     const reqRes = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/adoption/adopter/${user.id}`, {
-        headers: {
-            authorization: `Bearer ${token}`
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/adoption/adopter/${user.id}`,
+        {
+            headers: {
+                authorization: `Bearer ${token}`
+            }
         }
-    });
+    );
+
     const requests = await reqRes.json();
 
     const totalReq = requests.length;
@@ -55,82 +60,90 @@ const Dashboard = async () => {
     const rejectedReq = requests.filter(r => r.status?.toLowerCase() === "rejected").length;
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-10">
+        <div className="space-y-10">
 
+            {/* HEADER */}
             <div>
-                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
+                <h1 className="text-3xl sm:text-4xl font-bold text-green-900 dark:text-white tracking-tight">
                     Dashboard
                 </h1>
-                <p className="text-gray-500 mt-2">
+                <p className="text-green-700/70 dark:text-neutral-400 mt-2 text-sm">
                     Overview of your pets and adoption activity
                 </p>
             </div>
 
+            {/* PETS */}
             <section>
-                <h2 className="text-xl font-bold mb-4">🐾 My Pets</h2>
+                <h2 className="text-xl font-bold mb-4 text-green-900 dark:text-white">🐾 My Pets</h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
 
-                    <div className="p-6 rounded-2xl border bg-white shadow-sm">
-                        <p className="text-3xl font-bold">{totalPets}</p>
-                        <p className="text-sm text-gray-500">Total Pets</p>
+                    <div className="p-6 rounded-2xl border border-green-100 dark:border-neutral-800 bg-white dark:bg-neutral-900/50 shadow-sm">
+                        <p className="text-3xl font-bold text-green-950 dark:text-white">{totalPets}</p>
+                        <p className="text-sm text-green-700/70 dark:text-neutral-400 mt-0.5">Total Pets</p>
                     </div>
 
-                    <div className="p-6 rounded-2xl border bg-green-50">
-                        <p className="text-3xl font-bold text-green-600">{availablePets}</p>
-                        <p className="text-sm text-gray-500">Available</p>
+                    <div className="p-6 rounded-2xl border border-green-200 dark:border-green-900/30 bg-green-50/50 dark:bg-green-950/20 shadow-sm">
+                        <p className="text-3xl font-bold text-green-600 dark:text-green-400">{availablePets}</p>
+                        <p className="text-sm text-green-700/70 dark:text-neutral-400 mt-0.5">Available</p>
                     </div>
 
-                    <div className="p-6 rounded-2xl border bg-blue-50">
-                        <p className="text-3xl font-bold text-blue-600">{adoptedPets}</p>
-                        <p className="text-sm text-gray-500">Adopted</p>
+                    <div className="p-6 rounded-2xl border border-blue-200 dark:border-blue-900/30 bg-blue-50/50 dark:bg-blue-950/20 shadow-sm">
+                        <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{adoptedPets}</p>
+                        <p className="text-sm text-green-700/70 dark:text-neutral-400 mt-0.5">Adopted</p>
                     </div>
 
                 </div>
             </section>
 
+            {/* REQUESTS */}
             <section>
-                <h2 className="text-xl font-bold mb-4">📋 My Requests</h2>
+                <h2 className="text-xl font-bold mb-4 text-green-900 dark:text-white">📋 My Requests</h2>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 
-                    <div className="p-5 rounded-2xl border bg-white shadow-sm">
-                        <p className="text-2xl font-bold">{totalReq}</p>
-                        <p className="text-sm text-gray-500">Total</p>
+                    <div className="p-5 rounded-2xl border border-green-100 dark:border-neutral-800 bg-white dark:bg-neutral-900/50 shadow-sm">
+                        <p className="text-2xl font-bold text-green-950 dark:text-white">{totalReq}</p>
+                        <p className="text-sm text-green-700/70 dark:text-neutral-400 mt-0.5">Total</p>
                     </div>
 
-                    <div className="p-5 rounded-2xl border bg-yellow-50">
-                        <p className="text-2xl font-bold text-yellow-600">{pendingReq}</p>
-                        <p className="text-sm text-gray-500">Pending</p>
+                    <div className="p-5 rounded-2xl border border-yellow-200 dark:border-yellow-900/30 bg-yellow-50/50 dark:bg-yellow-950/20 shadow-sm">
+                        <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-500">{pendingReq}</p>
+                        <p className="text-sm text-green-700/70 dark:text-neutral-400 mt-0.5">Pending</p>
                     </div>
 
-                    <div className="p-5 rounded-2xl border bg-green-50">
-                        <p className="text-2xl font-bold text-green-600">{approvedReq}</p>
-                        <p className="text-sm text-gray-500">Approved</p>
+                    <div className="p-5 rounded-2xl border border-green-200 dark:border-green-900/30 bg-green-50/50 dark:bg-emerald-950/20 shadow-sm">
+                        <p className="text-2xl font-bold text-green-600 dark:text-emerald-400">{approvedReq}</p>
+                        <p className="text-sm text-green-700/70 dark:text-neutral-400 mt-0.5">Approved</p>
                     </div>
 
-                    <div className="p-5 rounded-2xl border bg-red-50">
-                        <p className="text-2xl font-bold text-red-600">{rejectedReq}</p>
-                        <p className="text-sm text-gray-500">Rejected</p>
+                    <div className="p-5 rounded-2xl border border-red-200 dark:border-red-900/30 bg-red-50/50 dark:bg-red-950/20 shadow-sm">
+                        <p className="text-2xl font-bold text-red-600 dark:text-red-500">{rejectedReq}</p>
+                        <p className="text-sm text-green-700/70 dark:text-neutral-400 mt-0.5">Rejected</p>
                     </div>
 
                 </div>
             </section>
 
-            <section className="flex gap-3 flex-wrap">
-
+            {/* ACTIONS */}
+            <section className="flex gap-3 flex-wrap pt-4 border-t border-green-100 dark:border-neutral-800">
                 <Link href="/listings">
-                    <Button variant="outline">Browse Pets</Button>
+                    <Button variant="outline" className="border-green-200 dark:border-neutral-700 text-green-800 dark:text-neutral-200 hover:bg-green-50 dark:hover:bg-neutral-800 rounded-xl font-medium">
+                        Browse Pets
+                    </Button>
                 </Link>
 
                 <Link href="/add-pet">
-                    <Button variant="outline">Add Pet</Button>
+                    <Button variant="outline" className="border-green-200 dark:border-neutral-700 text-green-800 dark:text-neutral-200 hover:bg-green-50 dark:hover:bg-neutral-800 rounded-xl font-medium">
+                        Add Pet
+                    </Button>
                 </Link>
 
                 <Link href="/my-requests">
-                    <Button variant="outline">View Requests</Button>
+                    <Button variant="outline" className="border-green-200 dark:border-neutral-700 text-green-800 dark:text-neutral-200 hover:bg-green-50 dark:hover:bg-neutral-800 rounded-xl font-medium">
+                        View Requests
+                    </Button>
                 </Link>
-
             </section>
 
         </div>

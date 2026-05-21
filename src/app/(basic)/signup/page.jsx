@@ -13,16 +13,9 @@ const SignUpPage = () => {
     const [loading, setLoading] = useState(false);
 
     const validatePassword = (password) => {
-        if (password.length < 6) {
-            return "Password must be at least 6 characters";
-        }
-        if (!/[A-Z]/.test(password)) {
-            return "Password must contain at least one uppercase letter";
-        }
-        if (!/[a-z]/.test(password)) {
-            return "Password must contain at least one lowercase letter";
-        }
-        return;
+        if (password.length < 6) return "Password must be at least 6 characters";
+        if (!/[A-Z]/.test(password)) return "Password must contain at least one uppercase letter";
+        if (!/[a-z]/.test(password)) return "Password must contain at least one lowercase letter";
     };
 
     const onSubmit = async (e) => {
@@ -31,10 +24,8 @@ const SignUpPage = () => {
         setLoading(true);
 
         const formData = new FormData(e.currentTarget);
-        const userData = Object.fromEntries(formData.entries());
-
-        // console.log(data);
-        const { name, email, photo, password, confirmPassword } = userData;
+        const { name, email, photo, password, confirmPassword } =
+            Object.fromEntries(formData.entries());
 
         const passwordError = validatePassword(password);
         if (passwordError) {
@@ -49,78 +40,75 @@ const SignUpPage = () => {
             return;
         }
 
-        // console.log({ name, email, photo, password });
-
         const { data, error } = await authClient.signUp.email({
-            email: email,
-            password: password,
-            name: name,
+            email,
+            password,
+            name,
             image: photo,
-        })
-
-        // console.log({ data, error });
+        });
 
         if (data) {
-            toast.success(`Sign Up Succesfully! -> ${data?.user?.name} Please Login In to Preceed...`)
+            toast.success(`Sign Up Successfully! -> ${data?.user?.name} Please Login...`);
             redirect('/signin');
         }
+
         if (error) {
-            toast.error(`An Unexpected Error Occured! || ${error?.message}`)
+            toast.error(`An Unexpected Error Occurred! || ${error?.message}`);
             setLoading(false);
             return;
         }
 
         setLoading(false);
-    }
+    };
 
     const handleGoogleSignIn = async () => {
         await authClient.signIn.social({
             provider: "google"
-        })
-    }
+        });
+    };
 
     return (
         <div className="max-w-7xl mx-auto py-10">
-            <Card className="border max-w-md mx-auto p-6 rounded-2xl">
-                <h1 className="text-2xl font-bold text-center mb-4">
+            <Card className="border max-w-md mx-auto p-6 rounded-2xl bg-white dark:bg-neutral-950 dark:border-neutral-800">
+
+                <h1 className="text-2xl font-bold text-center mb-4 text-gray-900 dark:text-white">
                     Create Account
                 </h1>
 
-                {
-                    error && (
-                        <p className="text-red-500 text-sm mb-4 text-center">
-                            {error}
-                        </p>
-                    )
-                }
+                {error && (
+                    <p className="text-red-500 text-sm mb-4 text-center">
+                        {error}
+                    </p>
+                )}
 
                 <form className="space-y-5" onSubmit={onSubmit}>
+
                     <TextField name="name" type="text" isRequired>
-                        <Label>Name</Label>
+                        <Label className="dark:text-white">Name</Label>
                         <Input placeholder="Enter your name" />
                         <FieldError />
                     </TextField>
 
                     <TextField name="email" type="email" isRequired>
-                        <Label>Email</Label>
+                        <Label className="dark:text-white">Email</Label>
                         <Input placeholder="Enter email" />
                         <FieldError />
                     </TextField>
 
                     <TextField name="photo" type="url">
-                        <Label>Photo URL</Label>
+                        <Label className="dark:text-white">Photo URL</Label>
                         <Input placeholder="https://example.com/photo.jpg" />
                         <FieldError />
                     </TextField>
 
                     <TextField name="password" type="password" isRequired>
-                        <Label>Password</Label>
+                        <Label className="dark:text-white">Password</Label>
                         <Input type="password" placeholder="Create password" />
                         <FieldError />
                     </TextField>
 
                     <TextField name="confirmPassword" type="password" isRequired>
-                        <Label>Confirm Password</Label>
+                        <Label className="dark:text-white">Confirm Password</Label>
                         <Input type="password" placeholder="Re-enter password" />
                         <FieldError />
                     </TextField>
@@ -134,17 +122,29 @@ const SignUpPage = () => {
                     </Button>
                 </form>
 
-                <p className="text-center text-sm my-4 text-gray-600">
-                    Already have an account? <Link href={'/signin'}><span className="text-green-700 font-medium cursor-pointer">Login Now!</span></Link>
+                <p className="text-center text-sm my-4 text-gray-600 dark:text-gray-400">
+                    Already have an account?{" "}
+                    <Link href={'/signin'}>
+                        <span className="text-green-700 font-medium cursor-pointer">
+                            Login Now!
+                        </span>
+                    </Link>
                 </p>
 
-                <div className='flex justify-center items-center gap-3'>
+                <div className='flex justify-center items-center gap-3 my-4'>
                     <Separator />
-                    <p className='whitespace-nowrap'>or</p>
+                    <p className='whitespace-nowrap dark:text-gray-400'>or</p>
                     <Separator />
                 </div>
 
-                <Button onClick={handleGoogleSignIn} variant='outline' className={'w-full rounded-xl'}><FcGoogle /> Sign In with Google</Button>
+                <Button
+                    onClick={handleGoogleSignIn}
+                    variant='outline'
+                    className='w-full rounded-xl dark:bg-neutral-900 dark:border-neutral-800'
+                >
+                    <FcGoogle /> Sign In with Google
+                </Button>
+
             </Card>
         </div>
     );

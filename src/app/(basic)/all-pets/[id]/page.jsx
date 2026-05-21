@@ -6,45 +6,39 @@ import React from 'react';
 
 const PetDetailsCard = async ({ params }) => {
     const { id } = await params;
-    // console.log(id);
 
-    const { token } = await auth.api.getToken({
+    const tokenRes = await auth.api.getToken({
         headers: await headers()
-    })
+    });
 
-    // console.log(token)
+    const token = tokenRes?.token;
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pet/${id}`, {
-        headers: {
-            authorization: `Bearer ${token}`
-        }
+        headers: token
+            ? { authorization: `Bearer ${token}` }
+            : {}
     });
 
     if (!res.ok) {
         return (
-            <section className="py-16 text-center text-gray-500">
+            <section className="py-16 text-center text-gray-500 dark:text-gray-400">
                 Pet temporarily unavailable
             </section>
         );
     }
 
     const petDetails = await res.json();
-    // console.log(petDetails);
-
-    const {
-        _id,
-        petName,
-    } = petDetails;
+    const { _id, petName } = petDetails;
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-10">
+        <div className="max-w-7xl mx-auto px-4 py-10 bg-white dark:bg-black">
 
             <div className="mb-10">
-                <h1 className="text-3xl md:text-4xl font-bold text-green-800">
+                <h1 className="text-3xl md:text-4xl font-bold text-green-800 dark:text-white">
                     Meet {petName}
                 </h1>
 
-                <p className="text-gray-500 mt-2">
+                <p className="text-gray-500 dark:text-gray-400 mt-2">
                     Give this adorable pet a loving forever home.
                 </p>
             </div>

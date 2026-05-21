@@ -21,7 +21,7 @@ const PetCard = ({ petData }) => {
     } = petData;
 
     return (
-        <Card className="group overflow-hidden border shadow-sm hover:shadow-xl transition-all duration-300 rounded-3xl">
+        <Card className="group overflow-hidden border shadow-sm hover:shadow-xl transition-all duration-300 rounded-3xl bg-white dark:bg-neutral-950 dark:border-neutral-800">
 
             <div className="relative overflow-hidden">
                 <Image
@@ -34,7 +34,7 @@ const PetCard = ({ petData }) => {
 
                 <Chip
                     size="sm"
-                    className="absolute top-4 left-4 bg-white text-black font-medium"
+                    className="absolute top-4 left-4 bg-white dark:bg-neutral-900 text-black dark:text-white font-medium"
                 >
                     <div className="flex items-center gap-1">
                         <MdPets />
@@ -47,8 +47,8 @@ const PetCard = ({ petData }) => {
                         size="sm"
                         className={`font-bold uppercase text-[10px] tracking-wider
                             ${adoptionStatus === "adopted"
-                                ? "bg-red-100 text-red-600"
-                                : "bg-green-100 text-green-700"
+                                ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"
+                                : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
                             }
                         `}
                     >
@@ -61,16 +61,16 @@ const PetCard = ({ petData }) => {
             <div className="p-5 space-y-4">
 
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-800">
+                    <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
                         {petName}
                     </h1>
 
-                    <p className="text-gray-500 text-sm mt-1">
+                    <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
                         {breed}
                     </p>
                 </div>
 
-                <div className="flex items-center justify-between text-sm text-gray-600">
+                <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-300">
 
                     <div className="flex items-center gap-2">
                         {
@@ -82,7 +82,7 @@ const PetCard = ({ petData }) => {
                         <span>{gender}</span>
                     </div>
 
-                    <div className="flex items-center gap-1 font-semibold text-green-700">
+                    <div className="flex items-center gap-1 font-semibold text-green-700 dark:text-green-400">
                         <BiDollar size={20} />
                         {adoptionFee}
                     </div>

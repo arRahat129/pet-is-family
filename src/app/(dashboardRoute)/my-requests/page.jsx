@@ -12,8 +12,8 @@ const MyRequestsPage = async () => {
 
     if (!user) {
         return (
-            <div className="max-w-7xl mx-auto px-4 py-10">
-                <h2 className="text-xl font-semibold text-red-500">
+            <div className="max-w-7xl mx-auto px-4 py-10 bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 rounded-xl border border-neutral-200 dark:border-neutral-800 text-center">
+                <h2 className="text-xl font-semibold text-red-500 dark:text-red-400">
                     Please login to view your requests
                 </h2>
             </div>
@@ -22,7 +22,7 @@ const MyRequestsPage = async () => {
 
     const { token } = await auth.api.getToken({
         headers: await headers()
-    })
+    });
 
     const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/adoption/adopter/${user.id}`,
@@ -36,8 +36,8 @@ const MyRequestsPage = async () => {
 
     if (!res.ok) {
         return (
-            <section className="py-16 text-center text-gray-500">
-                Pets temporarily unavailable
+            <section className="py-16 text-center text-neutral-500 dark:text-neutral-400 bg-white dark:bg-neutral-950 rounded-xl border border-neutral-200 dark:border-neutral-800 font-medium">
+                Requests temporarily unavailable
             </section>
         );
     }

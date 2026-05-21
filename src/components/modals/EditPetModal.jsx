@@ -3,18 +3,17 @@
 import React, { useRef, useState } from "react";
 import {
     Button,
-    FieldError,
-    Input,
     Label,
     ListBox,
     Modal,
     Surface,
     TextArea,
     TextField,
-    Select
+    Select,
+    Input
 } from "@heroui/react";
 
-import { FolderPlus, TrashBin } from "@gravity-ui/icons";
+import { FolderPlus } from "@gravity-ui/icons";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
@@ -90,8 +89,8 @@ const EditPetModal = ({ pet }) => {
             setIsOpen(false);
 
         } catch (error) {
-            toast.error(error);
-            setErrorMessage(error.message || "Something went wrong");
+            toast.error(error?.message || "Error");
+            setErrorMessage(error?.message || "Something went wrong");
         } finally {
             setIsLoading(false);
         }
@@ -115,11 +114,11 @@ const EditPetModal = ({ pet }) => {
 
             <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
 
-                <Modal.Backdrop className="backdrop-blur-sm bg-black/40">
+                <Modal.Backdrop className="backdrop-blur-sm bg-black/40 dark:bg-black/70">
 
                     <Modal.Container placement="center">
 
-                        <Modal.Dialog className="sm:max-w-3xl rounded-3xl">
+                        <Modal.Dialog className="sm:max-w-3xl rounded-3xl bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800">
 
                             <Modal.CloseTrigger />
 
@@ -128,39 +127,41 @@ const EditPetModal = ({ pet }) => {
                                     <FolderPlus className="size-5" />
                                 </Modal.Icon>
 
-                                <Modal.Heading>Edit Pet</Modal.Heading>
+                                <Modal.Heading className="text-gray-900 dark:text-white">
+                                    Edit Pet
+                                </Modal.Heading>
 
-                                <p className="text-sm text-gray-500 mt-1">
+                                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                                     Update pet information
                                 </p>
                             </Modal.Header>
 
                             <Modal.Body className="p-6">
 
-                                <Surface>
+                                <Surface className="bg-white dark:bg-gray-950">
 
                                     <form ref={formRef} onSubmit={onSubmit} className="space-y-6">
 
                                         {errorMessage && (
-                                            <div className="bg-red-100 text-red-600 p-3 rounded-xl">
+                                            <div className="bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-300 p-3 rounded-xl">
                                                 {errorMessage}
                                             </div>
                                         )}
 
                                         <TextField name="petName" defaultValue={petName}>
-                                            <Label>Pet Name</Label>
-                                            <Input className="rounded-xl" />
+                                            <Label className="dark:text-gray-300">Pet Name</Label>
+                                            <Input className="rounded-xl dark:bg-gray-900 dark:text-white" />
                                         </TextField>
 
                                         <div>
-                                            <Label>Species</Label>
+                                            <Label className="dark:text-gray-300">Species</Label>
                                             <Select
                                                 selectedKeys={new Set([speciesValue])}
                                                 onSelectionChange={(keys) =>
-                                                    setSpeciesValue(Array.from(keys))
+                                                    setSpeciesValue(Array.from(keys)[0])
                                                 }
                                             >
-                                                <Select.Trigger className="rounded-xl">
+                                                <Select.Trigger className="rounded-xl dark:bg-gray-900 dark:text-white">
                                                     <Select.Value />
                                                 </Select.Trigger>
 
@@ -177,24 +178,24 @@ const EditPetModal = ({ pet }) => {
                                         </div>
 
                                         <TextField name="breed" defaultValue={breed}>
-                                            <Label>Breed</Label>
-                                            <Input className="rounded-xl" />
+                                            <Label className="dark:text-gray-300">Breed</Label>
+                                            <Input className="rounded-xl dark:bg-gray-900 dark:text-white" />
                                         </TextField>
 
                                         <TextField name="age" defaultValue={age}>
-                                            <Label>Age</Label>
-                                            <Input type="number" className="rounded-xl" />
+                                            <Label className="dark:text-gray-300">Age</Label>
+                                            <Input type="number" className="rounded-xl dark:bg-gray-900 dark:text-white" />
                                         </TextField>
 
                                         <div>
-                                            <Label>Gender</Label>
+                                            <Label className="dark:text-gray-300">Gender</Label>
                                             <Select
                                                 selectedKeys={new Set([genderValue])}
                                                 onSelectionChange={(keys) =>
-                                                    setGenderValue(Array.from(keys))
+                                                    setGenderValue(Array.from(keys)[0])
                                                 }
                                             >
-                                                <Select.Trigger className="rounded-xl">
+                                                <Select.Trigger className="rounded-xl dark:bg-gray-900 dark:text-white">
                                                     <Select.Value />
                                                 </Select.Trigger>
 
@@ -208,33 +209,33 @@ const EditPetModal = ({ pet }) => {
                                         </div>
 
                                         <TextField name="imageUrl" defaultValue={imageUrl}>
-                                            <Label>Image</Label>
-                                            <Input className="rounded-xl" />
+                                            <Label className="dark:text-gray-300">Image</Label>
+                                            <Input className="rounded-xl dark:bg-gray-900 dark:text-white" />
                                         </TextField>
 
                                         <TextField name="healthStatus" defaultValue={healthStatus}>
-                                            <Label>Health</Label>
-                                            <Input className="rounded-xl" />
+                                            <Label className="dark:text-gray-300">Health</Label>
+                                            <Input className="rounded-xl dark:bg-gray-900 dark:text-white" />
                                         </TextField>
 
                                         <TextField name="vaccinationStatus" defaultValue={vaccinationStatus}>
-                                            <Label>Vaccination</Label>
-                                            <Input className="rounded-xl" />
+                                            <Label className="dark:text-gray-300">Vaccination</Label>
+                                            <Input className="rounded-xl dark:bg-gray-900 dark:text-white" />
                                         </TextField>
 
                                         <TextField name="location" defaultValue={location}>
-                                            <Label>Location</Label>
-                                            <Input className="rounded-xl" />
+                                            <Label className="dark:text-gray-300">Location</Label>
+                                            <Input className="rounded-xl dark:bg-gray-900 dark:text-white" />
                                         </TextField>
 
                                         <TextField name="adoptionFee" defaultValue={adoptionFee}>
-                                            <Label>Adoption Fee</Label>
-                                            <Input type="number" className="rounded-xl" />
+                                            <Label className="dark:text-gray-300">Adoption Fee</Label>
+                                            <Input type="number" className="rounded-xl dark:bg-gray-900 dark:text-white" />
                                         </TextField>
 
                                         <TextField name="description" defaultValue={description}>
-                                            <Label>Description</Label>
-                                            <TextArea className="rounded-xl" />
+                                            <Label className="dark:text-gray-300">Description</Label>
+                                            <TextArea className="rounded-xl dark:bg-gray-900 dark:text-white" />
                                         </TextField>
 
                                         <div className="flex gap-3 justify-end pt-4">

@@ -7,17 +7,15 @@ import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
 export default function AdoptionPanel({ petDetails }) {
-    const router = useRouter()
+    const router = useRouter();
     const { data: session } = authClient.useSession();
     const user = session?.user;
-
-    // console.log({ user, petDetails });
 
     const [loading, setLoading] = useState(false);
 
     if (petDetails.adoptionStatus === "adopted") {
         return (
-            <Card className="p-6 text-center border rounded-xl bg-red-50 text-red-700">
+            <Card className="p-6 text-center border rounded-xl bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300">
                 This pet has already been adopted.
             </Card>
         );
@@ -38,26 +36,20 @@ export default function AdoptionPanel({ petDetails }) {
             petId: petDetails._id,
             petName: petDetails.petName,
             petImage: petDetails.imageUrl,
-
             ownerId: petDetails.userId,
             ownerName: petDetails.ownerName,
             ownerEmail: petDetails.ownerEmail,
-
             adopterId: user?.id,
             adopterName: user?.name,
             adopterImage: user?.image,
             adopterEmail: user?.email,
-
             pickupDate: form.get("pickupDate"),
             message: form.get("message"),
-
             status: "pending",
             createdAt: new Date(),
         };
 
         const { data: tokenData } = await authClient.token();
-        // console.log(tokenData);
-
 
         try {
             const res = await fetch(
@@ -72,17 +64,10 @@ export default function AdoptionPanel({ petDetails }) {
                 }
             );
 
-            if (!res.ok) {
-                return (
-            <section className="py-16 text-center text-gray-500">
-                Pets temporarily unavailable
-            </section>
-        );
-            }
+            if (!res.ok) return;
 
-            const data = await res.json();
-            toast.success(`Successfully Requested to adopt ${petDetails.petName}`)
-            // console.log(data);
+            await res.json();
+            toast.success(`Successfully Requested to adopt ${petDetails.petName}`);
         } catch (error) {
             toast.error(error.message);
         } finally {
@@ -91,74 +76,45 @@ export default function AdoptionPanel({ petDetails }) {
     };
 
     return (
-        <form
+        <form className="space-y-4 bg-white dark:bg-neutral-950 p-5 rounded-xl border dark:border-neutral-800"
             onSubmit={handleAdopt}
-            className="space-y-4 bg-white p-5 rounded-xl border"
         >
-            <h2 className="text-lg font-semibold text-green-900">
+            <h2 className="text-lg font-semibold text-green-900 dark:text-green-400">
                 Request to Adopt
             </h2>
-            {
-                user?.id && petDetails.userId && user.id === petDetails.userId
-                    ? <>
-                        <Card className="p-6 border border-amber-200 bg-linear-to-br from-amber-50 to-orange-50 shadow-none rounded-xl text-center space-y-3">
-                            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-amber-600 animate-pulse">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m0-10.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.249-8.25-3.286zm0 13.036h.008v.008H12v-.008z" />
-                                </svg>
-                            </div>
-                            <div className="space-y-1">
-                                <h3 className="text-base font-bold text-amber-900">
-                                    Your Personal Listing
-                                </h3>
-                                <p className="text-xs text-amber-700 max-w-xs mx-auto leading-relaxed">
-                                    You are currently viewing a pet profile you created. Adoption forms are locked down for owners.
-                                </p>
-                            </div>
-                            <div className="pt-1">
-                                <div className="inline-block px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold tracking-wide uppercase">
-                                    Owner View Mode
-                                </div>
-                            </div>
-                        </Card>
-                    </>
-                    : <>
-                        <label className="text-sm">Pet Name</label>
-                        <Input value={petDetails.petName} label="Pet Name" readOnly className={'w-full'} />
 
-                        <label className="text-sm">Owner Name</label>
-                        <Input value={user?.name || ""} label="Your Name" readOnly className={'w-full'} />
+            {user?.id && petDetails.userId && user.id === petDetails.userId ? (
+                <Card className="p-6 border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/30 rounded-xl text-center">
+                    <h3 className="text-amber-900 dark:text-amber-300 font-bold">
+                        Your Personal Listing
+                    </h3>
+                </Card>
+            ) : (
+                <>
+                    <label className="text-sm dark:text-gray-300">Pet Name</label>
+                    <Input value={petDetails.petName} readOnly />
 
-                        <label className="text-sm">Owner Email</label>
-                        <Input value={user?.email || ""} label="Your Email" readOnly className={'w-full'} />
+                    <label className="text-sm dark:text-gray-300">Owner Name</label>
+                    <Input value={user?.name || ""} readOnly />
 
-                        <label className="text-sm">Preffered PickUp Day</label>
-                        <Input
-                            name="pickupDate"
-                            type="date"
-                            label="Pickup Date"
-                            required
-                            className={'w-full'}
-                        />
+                    <label className="text-sm dark:text-gray-300">Owner Email</label>
+                    <Input value={user?.email || ""} readOnly />
 
-                        <label className="text-sm">Text To Owner</label>
-                        <TextArea
-                            name="message"
-                            label="Message to Owner"
-                            placeholder="Why are you a good match?"
-                            required
-                            className={'w-full'}
-                        />
+                    <label className="text-sm dark:text-gray-300">Pickup Date</label>
+                    <Input name="pickupDate" type="date" required />
 
-                        <Button
-                            type="submit"
-                            className="w-full bg-green-600 text-white"
-                            isDisabled={loading}
-                        >
-                            {loading ? "Sending..." : "Adopt Pet"}
-                        </Button>
-                    </>
-            }
+                    <label className="text-sm dark:text-gray-300">Message</label>
+                    <TextArea name="message" required />
+
+                    <Button
+                        type="submit"
+                        className="w-full bg-green-600 text-white"
+                        isDisabled={loading}
+                    >
+                        {loading ? "Sending..." : "Adopt Pet"}
+                    </Button>
+                </>
+            )}
         </form>
     );
 }

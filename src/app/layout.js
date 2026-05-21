@@ -1,6 +1,7 @@
 import { Poppins, Nunito } from "next/font/google";
 import "./globals.css"; // Double check if this path needs to be "../globals.css" or "./globals.css" depending on your exact folder depth
 import { Toaster } from "react-hot-toast";
+import Providers from "./providers/Providers";
 
 export const poppins = Poppins({
     subsets: ["latin"],
@@ -24,8 +25,10 @@ export default function RootLayout({ children }) {
             className={`${poppins.className} ${nunito.className} h-full antialiased`}
         >
             <body className="min-h-full bg-white">
-                {children}
-                <Toaster />
+                <Providers>
+                    {children}
+                    <Toaster />
+                </Providers>
             </body>
         </html>
     );

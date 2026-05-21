@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import {
     Button,
     Label,
     ListBox,
     Modal,
-    Surface,
     TextArea,
     TextField,
     Select,
@@ -18,72 +17,67 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 
-const normalizeValue = (value) => {
-    if (!value) return "";
-    if (Array.isArray(value)) return value.join("");
-    return String(value).trim();
-};
-
 const EditPetModal = ({ pet }) => {
-
-    const {
-        _id,
-        petName,
-        species,
-        breed,
-        age,
-        gender,
-        imageUrl,
-        healthStatus,
-        vaccinationStatus,
-        location,
-        adoptionFee,
-        description
-    } = pet;
-
     const router = useRouter();
-    const formRef = useRef(null);
 
     const [isOpen, setIsOpen] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
-    const [speciesValue, setSpeciesValue] = useState(species || "");
-    const [genderValue, setGenderValue] = useState(gender || "");
+    // ✅ SINGLE SOURCE OF TRUTH
+    const [form, setForm] = useState({
+        petName: pet.petName || "",
+        species: pet.species || "",
+        breed: pet.breed || "",
+        age: pet.age || "",
+        gender: pet.gender || "",
+        imageUrl: pet.imageUrl || "",
+        healthStatus: pet.healthStatus || "",
+        vaccinationStatus: pet.vaccinationStatus || "",
+        location: pet.location || "",
+        adoptionFee: pet.adoptionFee || "",
+        description: pet.description || "",
+    });
+
+    const handleChange = (field, value) => {
+        setForm((prev) => ({
+            ...prev,
+            [field]: value
+        }));
+    };
 
     const onSubmit = async (e) => {
         e.preventDefault();
 
-        setErrorMessage("");
         setIsLoading(true);
+        setErrorMessage("");
 
         try {
-            const formData = new FormData(formRef.current);
-            const updatedPet = Object.fromEntries(formData.entries());
-
-            updatedPet.age = Number(updatedPet.age);
-            updatedPet.adoptionFee = Number(updatedPet.adoptionFee);
-
-            updatedPet.species = normalizeValue(speciesValue);
-            updatedPet.gender = normalizeValue(genderValue);
+            const payload = {
+                ...form,
+                age: Number(form.age),
+                adoptionFee: Number(form.adoptionFee),
+            };
 
             const { data: tokenData } = await authClient.token();
 
             const res = await fetch(
-                `${process.env.NEXT_PUBLIC_SERVER_URL}/pet/${_id}`,
+                `${process.env.NEXT_PUBLIC_SERVER_URL}/pet/${pet._id}`,
                 {
                     method: "PATCH",
                     headers: {
                         "content-type": "application/json",
                         authorization: `Bearer ${tokenData?.token}`
                     },
-                    body: JSON.stringify(updatedPet)
+                    body: JSON.stringify(payload)
                 }
             );
 
-            if (!res.ok) throw new Error("Failed to update pet");
-
             const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data?.message || "Failed to update pet");
+            }
 
             if (data.modifiedCount > 0) {
                 toast.success("Pet updated successfully");
@@ -95,8 +89,8 @@ const EditPetModal = ({ pet }) => {
             setIsOpen(false);
 
         } catch (error) {
-            toast.error(error?.message || "Error");
-            setErrorMessage(error?.message || "Something went wrong");
+            toast.error(error.message || "Error occurred");
+            setErrorMessage(error.message || "Something went wrong");
         } finally {
             setIsLoading(false);
         }
@@ -104,7 +98,6 @@ const EditPetModal = ({ pet }) => {
 
     return (
         <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
-
             <Button
                 size="sm"
                 variant="secondary"
@@ -119,15 +112,12 @@ const EditPetModal = ({ pet }) => {
             </Button>
 
             <Modal.Backdrop className="bg-black/40 dark:bg-black/80">
-
                 <Modal.Container>
-
                     <Modal.Dialog className="
                         sm:max-w-3xl rounded-3xl
                         bg-white dark:bg-black
                         border border-black dark:border-white
                     ">
-
                         <Modal.CloseTrigger />
 
                         <Modal.Header>
@@ -145,26 +135,33 @@ const EditPetModal = ({ pet }) => {
                         </Modal.Header>
 
                         <Modal.Body>
-
-                            <form ref={formRef} onSubmit={onSubmit} className="space-y-5">
+                            <form onSubmit={onSubmit} className="space-y-5">
 
                                 {errorMessage && (
-                                    <div className="p-3 rounded-xl border border-black">
+                                    <div className="p-3 rounded-xl border border-black text-black dark:text-white">
                                         {errorMessage}
                                     </div>
                                 )}
 
-                                <TextField name="petName" defaultValue={petName}>
-                                    <Label className="text-black dark:text-white">Pet Name</Label>
-                                    <Input className="w-full bg-white text-black border" />
+                                {/* Pet Name */}
+                                <TextField>
+                                    <Label>Pet Name</Label>
+                                    <Input
+                                        value={form.petName}
+                                        onChange={(e) =>
+                                            handleChange("petName", e.target.value)
+                                        }
+                                        className="w-full bg-white text-black border"
+                                    />
                                 </TextField>
 
+                                {/* Species */}
                                 <div>
-                                    <Label className="text-black dark:text-white">Species</Label>
+                                    <Label>Species</Label>
                                     <Select
-                                        selectedKeys={new Set([speciesValue])}
-                                        onSelectionChange={(keys) =>
-                                            setSpeciesValue(normalizeValue(Array.from(keys)[0]))
+                                        selectedKeys={form.species ? new Set([form.species]) : new Set()}
+                                        onSelectionChange={(key) =>
+                                            handleChange("species", String(key ?? ""))
                                         }
                                     >
                                         <Select.Trigger className="w-full bg-white text-black border">
@@ -183,22 +180,36 @@ const EditPetModal = ({ pet }) => {
                                     </Select>
                                 </div>
 
-                                <TextField name="breed" defaultValue={breed}>
-                                    <Label className="text-black dark:text-white">Breed</Label>
-                                    <Input className="w-full bg-white text-black border" />
+                                {/* Breed */}
+                                <TextField>
+                                    <Label>Breed</Label>
+                                    <Input
+                                        value={form.breed}
+                                        onChange={(e) =>
+                                            handleChange("breed", e.target.value)
+                                        }
+                                    />
                                 </TextField>
 
-                                <TextField name="age" defaultValue={age}>
-                                    <Label className="text-black dark:text-white">Age</Label>
-                                    <Input type="number" className="w-full bg-white text-black border" />
+                                {/* Age */}
+                                <TextField>
+                                    <Label>Age</Label>
+                                    <Input
+                                        type="number"
+                                        value={form.age}
+                                        onChange={(e) =>
+                                            handleChange("age", e.target.value)
+                                        }
+                                    />
                                 </TextField>
 
+                                {/* Gender */}
                                 <div>
-                                    <Label className="text-black dark:text-white">Gender</Label>
+                                    <Label>Gender</Label>
                                     <Select
-                                        selectedKeys={new Set([genderValue])}
-                                        onSelectionChange={(keys) =>
-                                            setGenderValue(normalizeValue(Array.from(keys)[0]))
+                                        selectedKeys={form.gender ? new Set([form.gender]) : new Set()}
+                                        onSelectionChange={(key) =>
+                                            handleChange("gender", String(key ?? ""))
                                         }
                                     >
                                         <Select.Trigger className="w-full bg-white text-black border">
@@ -214,36 +225,74 @@ const EditPetModal = ({ pet }) => {
                                     </Select>
                                 </div>
 
-                                <TextField name="imageUrl" defaultValue={imageUrl}>
-                                    <Label className="text-black dark:text-white">Image</Label>
-                                    <Input className="w-full bg-white text-black border" />
+                                {/* Image */}
+                                <TextField>
+                                    <Label>Image</Label>
+                                    <Input
+                                        value={form.imageUrl}
+                                        onChange={(e) =>
+                                            handleChange("imageUrl", e.target.value)
+                                        }
+                                    />
                                 </TextField>
 
-                                <TextField name="healthStatus" defaultValue={healthStatus}>
-                                    <Label className="text-black dark:text-white">Health</Label>
-                                    <Input className="w-full bg-white text-black border" />
+                                {/* Health */}
+                                <TextField>
+                                    <Label>Health</Label>
+                                    <Input
+                                        value={form.healthStatus}
+                                        onChange={(e) =>
+                                            handleChange("healthStatus", e.target.value)
+                                        }
+                                    />
                                 </TextField>
 
-                                <TextField name="vaccinationStatus" defaultValue={vaccinationStatus}>
-                                    <Label className="text-black dark:text-white">Vaccination</Label>
-                                    <Input className="w-full bg-white text-black border" />
+                                {/* Vaccination */}
+                                <TextField>
+                                    <Label>Vaccination</Label>
+                                    <Input
+                                        value={form.vaccinationStatus}
+                                        onChange={(e) =>
+                                            handleChange("vaccinationStatus", e.target.value)
+                                        }
+                                    />
                                 </TextField>
 
-                                <TextField name="location" defaultValue={location}>
-                                    <Label className="text-black dark:text-white">Location</Label>
-                                    <Input className="w-full bg-white text-black border" />
+                                {/* Location */}
+                                <TextField>
+                                    <Label>Location</Label>
+                                    <Input
+                                        value={form.location}
+                                        onChange={(e) =>
+                                            handleChange("location", e.target.value)
+                                        }
+                                    />
                                 </TextField>
 
-                                <TextField name="adoptionFee" defaultValue={adoptionFee}>
-                                    <Label className="text-black dark:text-white">Adoption Fee</Label>
-                                    <Input type="number" className="w-full bg-white text-black border" />
+                                {/* Fee */}
+                                <TextField>
+                                    <Label>Adoption Fee</Label>
+                                    <Input
+                                        type="number"
+                                        value={form.adoptionFee}
+                                        onChange={(e) =>
+                                            handleChange("adoptionFee", e.target.value)
+                                        }
+                                    />
                                 </TextField>
 
-                                <TextField name="description" defaultValue={description}>
-                                    <Label className="text-black dark:text-white">Description</Label>
-                                    <TextArea className="w-full bg-white text-black border" />
+                                {/* Description */}
+                                <TextField>
+                                    <Label>Description</Label>
+                                    <TextArea
+                                        value={form.description}
+                                        onChange={(e) =>
+                                            handleChange("description", e.target.value)
+                                        }
+                                    />
                                 </TextField>
 
+                                {/* Actions */}
                                 <div className="flex gap-3 justify-end">
                                     <Button variant="secondary" slot="close">
                                         Cancel
@@ -255,15 +304,10 @@ const EditPetModal = ({ pet }) => {
                                 </div>
 
                             </form>
-
                         </Modal.Body>
-
                     </Modal.Dialog>
-
                 </Modal.Container>
-
             </Modal.Backdrop>
-
         </Modal>
     );
 };

@@ -1,3 +1,4 @@
+import DeletePetModal from '@/components/modals/DeletePetModal';
 import EditPetModal from '@/components/modals/EditPetModal';
 import RequestsModal from '@/components/modals/RequestsModal';
 import { auth } from '@/lib/auth';
@@ -153,14 +154,7 @@ const ListingsPage = async () => {
 
                                 <EditPetModal pet={pet} />
 
-                                <Button
-                                    size="sm"
-                                    color="danger"
-                                    variant="flat"
-                                    className="w-full font-semibold rounded-xl bg-red-50 hover:bg-red-100 text-red-600 dark:bg-red-950/20 dark:text-red-400"
-                                >
-                                    Delete
-                                </Button>
+                                <DeletePetModal pet={pet} />
 
                             </div>
                         </div>

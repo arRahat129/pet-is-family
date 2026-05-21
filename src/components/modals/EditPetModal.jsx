@@ -24,7 +24,6 @@ const EditPetModal = ({ pet }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
-    // ✅ SINGLE SOURCE OF TRUTH
     const [form, setForm] = useState({
         petName: pet.petName || "",
         species: pet.species || "",

@@ -1,6 +1,9 @@
+'use client'
+
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 const Banner = () => {
     return (
@@ -18,12 +21,23 @@ const Banner = () => {
                     </p>
 
                     <div className="mt-6 flex justify-center md:justify-start">
-                        <Link
-                            href="/all-pets"
-                            className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition font-medium"
+                        <motion.div
+                            animate={{
+                                y: [0, -10, 0] // 👈 bounce up & down
+                            }}
+                            transition={{
+                                duration: 1,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                            }}
                         >
-                            Adopt Now
-                        </Link>
+                            <Link
+                                href="/all-pets"
+                                className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition font-medium inline-block"
+                            >
+                                Adopt Now
+                            </Link>
+                        </motion.div>
                     </div>
 
                 </div>

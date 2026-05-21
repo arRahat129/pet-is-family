@@ -9,6 +9,7 @@ import logoImg from "@/assets/logo.png";
 import { authClient } from "@/lib/auth-client";
 import { usePathname, useRouter } from "next/navigation";
 import ThemeToggle from "../homepage/ThemeToogle";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -120,99 +121,124 @@ export default function Navbar() {
                                     </div>
                                 </Button>
 
-                                {userMenuOpen && (
-                                    <div className="absolute right-0 top-14 w-48 bg-white dark:bg-neutral-900 border dark:border-neutral-800 rounded-lg shadow-lg overflow-hidden">
+                                <AnimatePresence>
+                                    {userMenuOpen && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                                            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                                            transition={{ duration: 0.15 }}
+                                            className="absolute right-0 top-14 w-48 bg-white dark:bg-neutral-900 border dark:border-neutral-800 rounded-lg shadow-lg overflow-hidden"
+                                        >
 
-                                        <div className="flex items-center justify-between px-4 py-2 border-b dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50">
-                                            <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                                                Account
-                                            </span>
-                                            <Button
-                                                isIconOnly
-                                                size="sm"
-                                                variant="light"
-                                                radius="sm"
-                                                onClick={() => setUserMenuOpen(false)}
-                                                className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 min-w-7 w-7 h-7"
-                                                aria-label="Close menu"
+                                            <div className="flex items-center justify-between px-4 py-2 border-b dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50">
+                                                <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                                                    Account
+                                                </span>
+                                                <Button
+                                                    isIconOnly
+                                                    size="sm"
+                                                    variant="light"
+                                                    radius="sm"
+                                                    onClick={() => setUserMenuOpen(false)}
+                                                    className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 min-w-7 w-7 h-7"
+                                                    aria-label="Close menu"
+                                                >
+                                                    <X size={14} strokeWidth={2.5} />
+                                                </Button>
+                                            </div>
+
+                                            <Link
+                                                href="/dashboard"
+                                                className="block px-4 py-2 text-sm hover:bg-green-50 dark:hover:bg-neutral-800"
                                             >
-                                                <X size={14} strokeWidth={2.5} />
-                                            </Button>
-                                        </div>
+                                                Dashboard
+                                            </Link>
 
-                                        <Link
-                                            href="/dashboard"
-                                            className="block px-4 py-2 text-sm hover:bg-green-50 dark:hover:bg-neutral-800"
-                                        >
-                                            Dashboard
-                                        </Link>
-
-                                        <button
-                                            onClick={handleLogout}
-                                            className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-green-50 dark:hover:bg-neutral-800"
-                                        >
-                                            <LogOut size={16} />
-                                            Logout
-                                        </button>
-                                    </div>
-                                )}
+                                            <button
+                                                onClick={handleLogout}
+                                                className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-green-50 dark:hover:bg-neutral-800"
+                                            >
+                                                <LogOut size={16} />
+                                                Logout
+                                            </button>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
                             </>
                         )}
                     </div>
                 </div>
             </header>
 
-            {mobileOpen && (
-                <div className="fixed inset-0 bg-black/30 dark:bg-black/60 z-50">
-                    <div className="absolute left-0 top-0 w-72 h-full bg-green-50 dark:bg-neutral-950 p-5 border-r border-green-100 dark:border-neutral-800">
-
-                        <button
-                            onClick={() => setMobileOpen(false)}
-                            className="mb-5 text-green-900 dark:text-white"
+            <AnimatePresence>
+                {mobileOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black/30 dark:bg-black/60 z-50"
+                    >
+                        <motion.div
+                            initial={{ x: -300 }}
+                            animate={{ x: 0 }}
+                            exit={{ x: -300 }}
+                            transition={{ type: "tween", duration: 0.2 }}
+                            className="absolute left-0 top-0 w-72 h-full bg-green-50 dark:bg-neutral-950 p-5 border-r border-green-100 dark:border-neutral-800"
                         >
-                            ✕
-                        </button>
+                            <button
+                                onClick={() => setMobileOpen(false)}
+                                className="mb-5 text-green-900 dark:text-white"
+                            >
+                                ✕
+                            </button>
 
-                        <div className="flex flex-col gap-4">
-                            {routes.map((route) => (
-                                <Link
-                                    key={route.href}
-                                    href={route.href}
-                                    onClick={() => setMobileOpen(false)}
-                                    className={`text-sm font-medium pb-1 transition ${pathname === route.href
-                                        ? "text-green-950 dark:text-white"
-                                        : "text-green-800 dark:text-gray-300 hover:text-green-950 dark:hover:text-white"
+                            <div className="flex flex-col gap-4">
+                                {routes.map((route) => (
+                                    <Link
+                                        key={route.href}
+                                        href={route.href}
+                                        onClick={() => setMobileOpen(false)}
+                                        className={`text-sm font-medium pb-1 transition ${
+                                            pathname === route.href
+                                                ? "text-green-950 dark:text-white"
+                                                : "text-green-800 dark:text-gray-300 hover:text-green-950 dark:hover:text-white"
                                         }`}
-                                >
-                                    {route.name}
-                                </Link>
-                            ))}
-
-                            <hr className="my-2 border-green-200 dark:border-neutral-800" />
-
-                            {user ? (
-                                <>
-                                    <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="text-green-800 dark:text-gray-300">
-                                        Dashboard
-                                    </Link>
-
-                                    <button
-                                        onClick={handleLogout}
-                                        className="text-left text-red-500"
                                     >
-                                        Logout
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    <Link href="/signin">Login</Link>
-                                    <Link href="/signup">Join for Free</Link>
-                                </>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
+                                        {route.name}
+                                    </Link>
+                                ))}
+
+                                <hr className="my-2 border-green-200 dark:border-neutral-800" />
+
+                                {user ? (
+                                    <>
+                                        <Link
+                                            href="/dashboard"
+                                            onClick={() => setMobileOpen(false)}
+                                            className="text-green-800 dark:text-gray-300"
+                                        >
+                                            Dashboard
+                                        </Link>
+
+                                        <button
+                                            onClick={handleLogout}
+                                            className="text-left text-red-500"
+                                        >
+                                            Logout
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Link href="/signin">Login</Link>
+                                        <Link href="/signup">Join for Free</Link>
+                                    </>
+                                )}
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </>
     );
 }

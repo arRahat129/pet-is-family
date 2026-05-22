@@ -36,14 +36,7 @@ const PetCard = ({ petData }) => {
 
                     <Chip
                         size="sm"
-                        className="
-        absolute top-4 left-4
-        bg-white dark:bg-neutral-900
-        text-black dark:text-white
-        font-bold shadow-md
-        animate-pulse
-        hover:scale-110
-        transition-transform duration-300
+                        className="absolute top-4 left-4 bg-white dark:bg-neutral-900 text-black dark:text-white font-bold shadow-md animate-pulse hover:scale-110 transition-transform duration-300
     "
                     >
                         <div className="flex items-center gap-1">
@@ -106,9 +99,15 @@ const PetCard = ({ petData }) => {
                     <div className="flex">
                         <Link href={`/all-pets/${_id}`} className="w-full">
                             <Button
-                                className="w-full bg-green-600 text-white font-medium rounded-xl"
+                                className={`w-full font-medium rounded-xl text-white ${adoptionStatus?.toLowerCase() === "adopted"
+                                        ? "bg-gray-500 hover:bg-red-500"
+                                        : "bg-green-600 hover:bg-green-700"
+                                    }`}
                             >
-                                View Details & Adopt Now!
+                                {adoptionStatus?.toLowerCase() === "adopted"
+                                    ? "Already Adopted"
+                                    : "Adopt Now!"
+                                }
                             </Button>
                         </Link>
                     </div>

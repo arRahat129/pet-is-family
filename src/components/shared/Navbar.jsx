@@ -51,7 +51,7 @@ export default function Navbar() {
                             className="md:hidden text-green-900 dark:text-neutral-200"
                             onClick={() => setMobileOpen(true)}
                         >
-                            <Menu size={22} />
+                            <Menu size={22} className="text-black dark:text-white" />
                         </button>
 
                         <Link href="/" className="font-bold text-xl flex gap-2 items-center">

@@ -64,7 +64,7 @@ const Dashboard = async () => {
         <div className="space-y-10">
 
             {/* HEADER */}
-            <MotionDiv>
+            <MotionDiv className="space-y-10">
                 <div>
                     <h1 className="text-3xl sm:text-4xl font-bold text-green-900 dark:text-white tracking-tight">
                         Dashboard

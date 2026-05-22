@@ -32,10 +32,10 @@ const PetDetailsCard = async ({ params }) => {
     const { _id, petName } = petDetails;
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-10 bg-white dark:bg-black">
+        <div className="max-w-7xl mx-auto px-4 py-10">
 
             <MotionWrapper>
-                <div className="mb-10 bg-white dark:bg-black">
+                <div className="mb-10">
                     <h1 className="text-3xl md:text-4xl font-bold text-green-800 dark:text-white">
                         Meet {petName}
                     </h1>

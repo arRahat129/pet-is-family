@@ -58,7 +58,7 @@ export default function DashboardLayout({ children }) {
 
     if (isPending) {
         return (
-            <div className="flex min-h-screen bg-green-50/30 dark:bg-neutral-950 text-green-950 dark:text-neutral-100">
+            <div className="flex min-h-screen text-green-950 dark:text-neutral-100">
                 <aside className="hidden md:flex fixed inset-y-0 left-0 w-64 flex-col border-r border-green-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-4 py-5">
                     <div className="animate-pulse space-y-4">
                         <div className="h-8 w-40 bg-green-100 dark:bg-neutral-800 rounded-lg" />
@@ -71,16 +71,16 @@ export default function DashboardLayout({ children }) {
                     </div>
                 </aside>
 
-                <div className="md:pl-64 flex-1 flex flex-col w-full bg-green-50/30 dark:bg-neutral-950">
+                <div className="md:pl-64 flex-1 flex flex-col w-full">
                     <header className="h-16 border-b border-green-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-4 md:px-8 flex items-center justify-between">
                         <div className="h-8 w-32 bg-green-100 dark:bg-neutral-800 rounded-lg animate-pulse" />
                     </header>
 
-                    <main className="flex-1 px-4 py-6 md:px-8 bg-green-50/30 dark:bg-neutral-950">
-                        <div className="mx-auto max-w-7xl bg-white dark:bg-neutral-900 rounded-xl border border-green-200 dark:border-neutral-800 p-6 shadow-sm">
+                    <main className="flex-1 px-4 py-6 md:px-8">
+                        <div className="mx-auto max-w-7xl rounded-xl border border-green-200 dark:border-neutral-800 p-6 shadow-sm">
                             <div className="animate-pulse space-y-4">
-                                <div className="h-8 w-56 bg-green-100 dark:bg-neutral-800 rounded-lg" />
-                                <div className="h-40 bg-green-100 dark:bg-neutral-800 rounded-2xl" />
+                                <div className="h-8 w-56 rounded-lg" />
+                                <div className="h-40 rounded-2xl" />
                             </div>
                         </div>
                     </main>
@@ -90,10 +90,10 @@ export default function DashboardLayout({ children }) {
     }
 
     return (
-        <div className="flex min-h-screen bg-green-50/30 dark:bg-neutral-950 text-green-950 dark:text-neutral-100 font-sans">
+        <div className="flex min-h-screen text-green-950 dark:text-neutral-100 font-sans">
 
             {/* SIDEBAR */}
-            <aside className="hidden md:flex fixed inset-y-0 left-0 z-20 w-64 flex-col border-r border-green-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-4 py-5">
+            <aside className="hidden md:flex fixed inset-y-0 left-0 z-20 w-64 flex-col border-r border-green-200 dark:border-neutral-800 px-4 py-5">
                 <div className="mb-8 px-2">
                     <Link href="/" className="flex flex-col gap-1.5 items-start">
                         <div className="flex gap-2 items-center">
@@ -102,7 +102,7 @@ export default function DashboardLayout({ children }) {
                                 PetIsFamily
                             </span>
                         </div>
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-green-100 dark:bg-neutral-800 text-green-800 dark:text-neutral-200 border border-green-200 dark:border-neutral-700">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold text-green-800 dark:text-neutral-200 border border-green-200 dark:border-neutral-700">
                             Dashboard
                         </span>
                     </Link>
@@ -161,7 +161,7 @@ export default function DashboardLayout({ children }) {
                             className="md:hidden p-1 text-green-950 dark:text-neutral-100"
                             onClick={() => setMobileOpen(true)}
                         >
-                            <Menu size={22} />
+                            <Menu size={22} className="text-black dark:text-white" />
                         </button>
                     </div>
 
@@ -181,7 +181,6 @@ export default function DashboardLayout({ children }) {
                                     </Avatar>
                                 </button>
 
-                                {/* DROPDOWN FIX: Corrected height positioning & colors */}
                                 {userMenuOpen && (
                                     <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-neutral-900 border border-green-200 dark:border-neutral-800 rounded-xl shadow-xl overflow-hidden z-50 text-neutral-800 dark:text-neutral-100">
                                         <Link

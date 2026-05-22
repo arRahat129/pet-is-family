@@ -41,6 +41,40 @@ const ListingsPage = async () => {
 
     const total = petOwner.length;
 
+    if (!petOwner || petOwner.length === 0) {
+        return (
+            <MotionWrapper>
+                <div className="flex flex-col items-center justify-center text-center py-24 px-6 rounded-3xl border border-dashed border-green-300 dark:border-neutral-700 bg-green-50/40 dark:bg-neutral-900/40">
+
+                    <div className="text-6xl mb-4">🐾</div>
+
+                    <h2 className="text-2xl font-bold text-green-900 dark:text-white">
+                        No Listings Yet
+                    </h2>
+
+                    <p className="text-green-700/70 dark:text-neutral-400 mt-2 max-w-md">
+                        You haven’t added any pets for adoption yet. Start by creating your first listing and help a pet find a new home.
+                    </p>
+
+                    <div className="flex gap-3 mt-6">
+                        <Link href="/add-pet">
+                            <Button className="bg-green-600 hover:bg-green-700 text-white rounded-xl px-5">
+                                + Add Your First Pet
+                            </Button>
+                        </Link>
+
+                        <Link href="/dashboard">
+                            <Button variant="outline" className="rounded-xl border-green-300 dark:border-neutral-700">
+                                Go to Dashboard
+                            </Button>
+                        </Link>
+                    </div>
+
+                </div>
+            </MotionWrapper>
+        );
+    }
+
     const adopted = petOwner.filter(
         p => p.adoptionStatus?.toLowerCase() === "adopted"
     ).length;
@@ -102,7 +136,6 @@ const ListingsPage = async () => {
 
             </div>
 
-            {/* LISTINGS GRID */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
                 {petOwner.map((pet, i) => (

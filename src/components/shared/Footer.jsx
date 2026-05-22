@@ -12,7 +12,7 @@ export default function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
                     {/* BRAND */}
-                    <div>
+                    <div className="text-center md:text-start">
                         <h2 className="text-xl font-bold text-green-900 dark:text-white">
                             PetIsFamily
                         </h2>
@@ -29,14 +29,14 @@ export default function Footer() {
 
                         <div className="flex flex-col gap-2 text-sm text-green-800 dark:text-gray-300">
 
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 text-green-700 dark:text-gray-400">
                                 <MdEmail size={18} />
-                                <span className="dark:text-gray-300">rahashik@gmail.com</span>
+                                <span>rahashik@gmail.com</span>
                             </div>
 
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 text-green-700 dark:text-gray-400">
                                 <MdPhone size={18} />
-                                <span className="dark:text-gray-300">+880 1234567890</span>
+                                <span>+880 1234567890</span>
                             </div>
 
                             <div className="text-green-700 dark:text-gray-400">
@@ -47,7 +47,7 @@ export default function Footer() {
                     </div>
 
                     {/* SOCIAL */}
-                    <div className="ml-auto px-10">
+                    <div className="flex flex-col items-center justify-start">
                         <h3 className="text-md font-semibold text-green-900 dark:text-white mb-3">
                             Social Links
                         </h3>

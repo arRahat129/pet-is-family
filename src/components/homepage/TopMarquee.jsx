@@ -30,7 +30,7 @@ const TopMarquee = async () => {
     ];
 
     return (
-        <div className="bg-white dark:bg-gray-950 border border-green-500 dark:border-gray-700 px-2 md:px-0">
+        <div className="bg-white dark:bg-gray-950 border border-green-500 dark:border-gray-700 rounded-full px-2 md:px-0">
 
             <div className="max-w-7xl mx-auto flex items-center px-4 py-3 gap-4">
 

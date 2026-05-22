@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Input, Dropdown, Button, Label } from "@heroui/react";
 import { Search, PawPrint, ArrowUpDown } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function FilterPanel({
     currentSearch,
@@ -45,16 +46,22 @@ export default function FilterPanel({
     };
 
     return (
-        <section className="
-            relative overflow-hidden
-            rounded-3xl
-            border border-green-100 dark:border-neutral-800
-            bg-gradient-to-br from-white via-green-50/40 to-white
-            dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950
-            shadow-xl
-            p-6 md:p-8
-            mb-10
-        ">
+        <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            whileHover={{ scale: 1.02 }}
+            className="
+                relative overflow-hidden
+                rounded-3xl
+                border border-green-100 dark:border-neutral-800
+                bg-linear-to-br from-white via-green-50/40 to-white
+                dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950
+                shadow-xl
+                p-6 md:p-8
+                mb-10
+            "
+        >
 
             {/* HEADER */}
             <div className="flex items-center gap-2 mb-6">
@@ -212,6 +219,6 @@ export default function FilterPanel({
                 </div>
 
             </div>
-        </section>
+        </motion.section>
     );
 }

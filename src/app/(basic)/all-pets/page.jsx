@@ -1,3 +1,4 @@
+import MotionWrapper from '@/components/motion/MotionWrapper';
 import FilterPanel from '@/components/pet/FilterPanel';
 import PetCard from '@/components/pet/PetCard';
 import React from 'react';
@@ -30,19 +31,20 @@ const AllPets = async ({ searchParams }) => {
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-10 bg-linear-to-b from-white to-green-50/30 dark:from-black dark:to-neutral-950 min-h-screen">
+            <MotionWrapper>
+                <div className="text-center mb-12">
+                    <h1 className="text-3xl md:text-4xl font-bold text-green-800 dark:text-white">
+                        Find Your New Best Friend
+                    </h1>
 
-            <div className="text-center mb-12">
-                <h1 className="text-3xl md:text-4xl font-bold text-green-800 dark:text-white">
-                    Find Your New Best Friend
-                </h1>
-
-                <p className="text-gray-500 dark:text-gray-400 mt-3 max-w-2xl mx-auto">
-                    Browse adorable pets waiting for a loving home.
-                </p>
-            </div>
-
-            <FilterPanel currentSearch={search} currentSpecies={species} currentSort={sort} />
-
+                    <p className="text-gray-500 dark:text-gray-400 mt-3 max-w-2xl mx-auto">
+                        Browse adorable pets waiting for a loving home.
+                    </p>
+                </div>
+            </MotionWrapper>
+            <MotionWrapper>
+                <FilterPanel currentSearch={search} currentSpecies={species} currentSort={sort} />
+            </MotionWrapper>
             <div className="mt-2">
                 {
                     allPetData.length === 0 ? (

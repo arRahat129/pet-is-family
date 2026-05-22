@@ -1,3 +1,4 @@
+import MotionWrapper from '@/components/motion/MotionWrapper';
 import AdoptionForm from '@/components/pet/AdoptionForm';
 import DetailsCard from '@/components/pet/DetailsCard';
 import { auth } from '@/lib/auth';
@@ -33,25 +34,31 @@ const PetDetailsCard = async ({ params }) => {
     return (
         <div className="max-w-7xl mx-auto px-4 py-10 bg-white dark:bg-black">
 
-            <div className="mb-10 bg-white dark:bg-black">
-                <h1 className="text-3xl md:text-4xl font-bold text-green-800 dark:text-white">
-                    Meet {petName}
-                </h1>
+            <MotionWrapper>
+                <div className="mb-10 bg-white dark:bg-black">
+                    <h1 className="text-3xl md:text-4xl font-bold text-green-800 dark:text-white">
+                        Meet {petName}
+                    </h1>
 
-                <p className="text-gray-500 dark:text-gray-400 mt-2">
-                    Give this adorable pet a loving forever home.
-                </p>
-            </div>
+                    <p className="text-gray-500 dark:text-gray-400 mt-2">
+                        Give this adorable pet a loving forever home.
+                    </p>
+                </div>
+            </MotionWrapper>
 
             <div className='grid grid-cols-1 xl:grid-cols-3 gap-8'>
 
-                <div className='xl:col-span-2'>
-                    <DetailsCard key={_id} petDetails={petDetails} />
-                </div>
+                <MotionWrapper>
+                    <div className='xl:col-span-2'>
+                        <DetailsCard key={_id} petDetails={petDetails} />
+                    </div>
+                </MotionWrapper>
 
-                <div>
-                    <AdoptionForm key={_id} petDetails={petDetails} />
-                </div>
+                <MotionWrapper>
+                    <div>
+                        <AdoptionForm key={_id} petDetails={petDetails} />
+                    </div>
+                </MotionWrapper>
 
             </div>
 

@@ -2,20 +2,17 @@
 
 import { motion } from "framer-motion";
 
-const MotionWrapper = ({ children }) => {
+const MotionWrapper = ({ children, delay = 0 }) => {
     return (
         <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
             transition={{
                 duration: 0.5,
-                ease: "easeOut",
+                delay,
+                ease: "easeOut"
             }}
-            whileHover={{
-                y: -8,
-                scale: 1.02,
-            }}
+            viewport={{ once: true }}
         >
             {children}
         </motion.div>

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { TrashBin } from "@gravity-ui/icons";
 import { motion } from "framer-motion";
+import RequestViewModal from "../modals/RequestViewModal";
 
 export default function MyRequestsClient({ myRequests, stats }) {
     const router = useRouter();
@@ -164,9 +165,7 @@ export default function MyRequestsClient({ myRequests, stats }) {
                                 </span>
 
                                 <div className="flex gap-2 pt-2">
-                                    <Button size="sm" variant="outline">
-                                        View
-                                    </Button>
+                                    <RequestViewModal request={request} />
 
                                     {request.status?.toLowerCase() === "pending" && (
                                         <Button
@@ -244,12 +243,7 @@ export default function MyRequestsClient({ myRequests, stats }) {
                                 </div>
 
                                 <div className="flex justify-center items-center gap-2">
-                                    <Link href={`#`}>
-                                        <Button size="sm" variant="outline" className="border-black dark:border-white hover:bg-gray-200 dark:hover:bg-gray-700
-                                hover:text-white dark:hover:text-black text-black dark:text-white font-medium">
-                                            View
-                                        </Button>
-                                    </Link>
+                                    <RequestViewModal request={request} />
 
                                     {request.status?.toLowerCase() === "pending" && (
                                         <Button

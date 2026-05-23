@@ -48,17 +48,13 @@ const PetDetailsCard = async ({ params }) => {
 
             <div className='grid grid-cols-1 xl:grid-cols-3 gap-8'>
 
-                <MotionWrapper>
-                    <div className='xl:col-span-2'>
-                        <DetailsCard key={_id} petDetails={petDetails} />
-                    </div>
-                </MotionWrapper>
+                <div className='xl:col-span-2'>
+                    <DetailsCard key={_id} petDetails={petDetails} />
+                </div>
 
-                <MotionWrapper>
-                    <div>
-                        <AdoptionForm key={_id} petDetails={petDetails} />
-                    </div>
-                </MotionWrapper>
+                <div>
+                    <AdoptionForm key={_id} petDetails={petDetails} />
+                </div>
 
             </div>
 

@@ -8,12 +8,16 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { FcGoogle } from 'react-icons/fc';
 import { motion } from "framer-motion";
+import { Eye, EyeSlash } from '@gravity-ui/icons';
 
 const SignUpPage = () => {
     const router = useRouter();
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+
+    const [showPass, setShowPass] = useState(false);
+    const [showConfirmPass, setShowConfirmPass] = useState(false);
 
     const validatePassword = (password) => {
         if (password.length < 6) return "Password must be at least 6 characters";
@@ -114,15 +118,47 @@ const SignUpPage = () => {
                             <FieldError />
                         </TextField>
 
-                        <TextField name="password" type="password" isRequired>
+                        <TextField name="password" isRequired>
                             <Label className="dark:text-white">Password</Label>
-                            <Input type="password" placeholder="Create password" />
+
+                            <div className="relative">
+                                <Input
+                                    type={showPass ? "text" : "password"}
+                                    placeholder="Create password"
+                                    className="w-full"
+                                />
+
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPass(!showPass)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 z-10 text-gray-500 dark:text-gray-400"
+                                >
+                                    {showPass ? <EyeSlash size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
+
                             <FieldError />
                         </TextField>
 
-                        <TextField name="confirmPassword" type="password" isRequired>
+                        <TextField name="confirmPassword" isRequired>
                             <Label className="dark:text-white">Confirm Password</Label>
-                            <Input type="password" placeholder="Re-enter password" />
+
+                            <div className="relative">
+                                <Input
+                                    type={showConfirmPass ? "text" : "password"}
+                                    placeholder="Re-enter password"
+                                    className="w-full"
+                                />
+
+                                <button
+                                    type="button"
+                                    onClick={() => setShowConfirmPass(!showConfirmPass)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 z-10 text-gray-500 dark:text-gray-400"
+                                >
+                                    {showConfirmPass ? <EyeSlash size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
+
                             <FieldError />
                         </TextField>
 
